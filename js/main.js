@@ -38,7 +38,17 @@ async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('haiBanhU_Token');
     const headers = { 'Content-Type': 'application/json', ...options.headers };
     if (token) { headers['Authorization'] = `Bearer ${token}`; }
-    const response = await fetch(`https://my-project-hub.onrender.com${url}`, { ...options, headers });
+
+    // =========================================================================
+    // SỬA LỖI Ở ĐÂY:
+    // Xóa địa chỉ server cứng "https://my-project-hub.onrender.com"
+    // Khi để trống, trình duyệt sẽ tự động gửi request đến domain hiện tại.
+    // Nếu đang chạy ở http://localhost:3000, request sẽ đi đến http://localhost:3000/api/...
+    // Nếu đang chạy ở https://my-project-hub.onrender.com, request sẽ đi đến https://my-project-hub.onrender.com/api/...
+    // Điều này giúp code chạy đúng ở cả môi trường local và production.
+    // =========================================================================
+    const response = await fetch(url, { ...options, headers });
+
     if (response.status === 401 || response.status === 403) { handleLogout(); throw new Error("Phiên đăng nhập không hợp lệ hoặc đã hết hạn."); }
     if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`); }
     const contentType = response.headers.get("content-type");

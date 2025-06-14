@@ -7,8 +7,61 @@ let activeDraggableInstance = null;
 let offsetX = 0, offsetY = 0;
 let googleLinkClient;
 
-function initializeGoogleLink() { if (typeof google === 'undefined') { showToast("Thư viện Google chưa sẵn sàng, vui lòng thử lại.", "error"); return; } if (googleLinkClient) return; try { const GOOGLE_CLIENT_ID = '71088181818-v5q7jald2jfg33ook691gttv5r4hivot.apps.googleusercontent.com'; googleLinkClient = google.accounts.oauth2.initCodeClient({ client_id: GOOGLE_CLIENT_ID, scope: 'email profile openid', callback: handleGoogleLinkResponse, }); } catch (error) { console.error("Lỗi khởi tạo Google Link:", error); } }
-async function handleGoogleLinkResponse(response) { showToast('Đang liên kết với Google...', 'info'); try { const result = await fetchWithAuth('/api/user/connect/google', { method: 'POST', body: JSON.stringify({ code: response.code }), }); currentUser = result.user; saveCurrentUserToSession(currentUser); renderAutomationConfig(); showToast(result.message, 'success'); } catch (error) { showToast(error.message, 'error'); } }
+function initializeGoogleLink() { 
+    if (typeof google === 'undefined') { 
+        showToast("Thư viện Google chưa sẵn sàng, vui lòng thử lại.", "error"); 
+        return; 
+    } 
+    if (googleLinkClient) return; 
+    try { 
+        // =================================================================
+        // SỬA LỖI Ở ĐÂY:
+        // Client ID cũ ('71088181818-v5q7jald2jfg33ook691gttv5r4hivot.apps.googleusercontent.com') không hợp lệ.
+        // Bạn PHẢI thay thế chuỗi placeholder bên dưới bằng Google OAuth Client ID của chính bạn.
+        // Client ID này phải khớp với biến GOOGLE_CLIENT_ID trong file .env của backend.
+        // Bạn có thể lấy nó từ: https://console.cloud.google.com/apis/credentials
+        // =================================================================
+        const GOOGLE_CLIENT_ID = '71088181818-dcci3a70i15s2v405mhmfnbc4euub70n.apps.googleusercontent.com'; // <<< THAY THẾ GIÁ TRỊ NÀY
+
+        if (GOOGLE_CLIENT_ID.startsWith('YOUR_GOOGLE_CLIENT_ID')) {
+            showToast("Lỗi cấu hình: Vui lòng cập nhật Google Client ID trong file automation.js", "error");
+            console.error("Lỗi cấu hình: Vui lòng cập nhật Google Client ID trong file automation.js");
+            return;
+        }
+
+        googleLinkClient = google.accounts.oauth2.initCodeClient({ 
+            client_id: GOOGLE_CLIENT_ID, 
+            scope: 'email profile openid', 
+            ux_mode: 'popup',
+            callback: handleGoogleAuthResponse,
+        }); 
+    } catch (error) { 
+        console.error("Lỗi khởi tạo Google Link:", error); 
+    } 
+}
+
+async function handleGoogleAuthResponse(response) {
+    const code = response.code;
+    if (code) {
+        showToast('Đang liên kết với Google...', 'info');
+        try {
+            const result = await fetchWithAuth('/api/user/connect/google', { 
+                method: 'POST', 
+                body: JSON.stringify({ code: code }), 
+            }); 
+            currentUser = result.user; 
+            saveCurrentUserToSession(currentUser); 
+            renderAutomationConfig(); 
+            showToast(result.message, 'success'); 
+        } catch (error) { 
+            showToast(error.message, 'error'); 
+        }
+    } else {
+        showToast('Xác thực Google đã bị hủy.', 'error');
+    }
+}
+
+
 function renderAutomationConfig() { const gmailConn = currentUser.connections?.gmail; const isConnected = gmailConn?.connected; const hasPassword = !!gmailConn?.appPassword; const req1Icon = document.getElementById('automation-gmail-req-1-icon'); const req1Btn = document.getElementById('automation-gmail-req-1-btn'); const req2Icon = document.getElementById('automation-gmail-req-2-icon'); const req2Btn = document.getElementById('automation-gmail-req-2-btn'); if(!req1Icon || !req1Btn || !req2Icon || !req2Btn) return; if (isConnected) { req1Icon.className = 'fa-solid fa-circle-check'; req1Btn.disabled = true; req1Btn.textContent = 'Đã liên kết'; req1Btn.classList.remove('btn-primary'); req1Btn.classList.add('btn-success'); } else { req1Icon.className = 'fa-regular fa-circle'; req1Btn.disabled = false; req1Btn.textContent = 'Liên kết'; req1Btn.classList.remove('btn-success'); req1Btn.classList.add('btn-primary'); } req2Btn.disabled = !isConnected; if (hasPassword) { req2Icon.className = 'fa-solid fa-circle-check'; req2Btn.textContent = 'Đã cung cấp'; } else { req2Icon.className = 'fa-regular fa-circle'; req2Btn.textContent = 'Cung cấp'; } }
 function showWorkflowList() { const workflowListView = document.getElementById('workflow-list-view'); const automationBuilderView = document.getElementById('automation-builder-view'); if(workflowListView) workflowListView.classList.remove('hidden'); if(automationBuilderView) automationBuilderView.classList.add('hidden'); removeAllLines(); renderWorkflows(); renderAutomationConfig(); }
 function openWorkflowBuilder(workflowId) { const workflowListView = document.getElementById('workflow-list-view'); const automationBuilderView = document.getElementById('automation-builder-view'); const automationCanvas = document.getElementById('automation-canvas'); currentWorkflowId = workflowId; const workflow = currentUser.workflows.find(w => String(w.id) === String(workflowId)); if (!workflow) return; activeWorkflow = JSON.parse(JSON.stringify(workflow)); if (!activeWorkflow.nodes) activeWorkflow.nodes = {}; if (!activeWorkflow.connections) activeWorkflow.connections = []; if(workflowListView) workflowListView.classList.add('hidden'); if(automationBuilderView) automationBuilderView.classList.remove('hidden'); document.getElementById('workflow-title-display').textContent = workflow.name; automationCanvas.innerHTML = ''; if (activeWorkflow.nodes) { Object.values(activeWorkflow.nodes).forEach(nodeData => { const nodeTemplate = document.querySelector(`.automation-nodes .node[data-type="${nodeData.type}"]`); if (nodeTemplate) { const addedNode = addNodeToCanvas(nodeData, nodeTemplate.innerHTML, nodeData.position); activeWorkflow.nodes[nodeData.id].element = addedNode; } }); } if (activeWorkflow.connections) { const tempConnections = [...activeWorkflow.connections]; activeWorkflow.connections = []; tempConnections.forEach(conn => { const startNode = document.getElementById(conn.from); const endNode = document.getElementById(conn.to); if(startNode && endNode) { connectNodes(startNode, endNode); } }); } updateRunButtonVisibility(); }
@@ -116,7 +169,6 @@ function openActionConfigModal(node) {
         case 'ai-agent':
             const promptGroup = document.createElement('div');
             promptGroup.className = 'form-group';
-            // --- SỬA ĐỔI MÔ TẢ VÀ GỢI Ý CHO AI AGENT ---
             promptGroup.innerHTML = `<label for="config-input-prompt">Yêu cầu cho AI</label><p class="form-help-text">Nhập yêu cầu của bạn cho người bạn AI, HaiBanhU. Nội dung được tạo ra có thể dùng cho các khối tiếp theo, ví dụ như nội dung của email.</p><textarea id="config-input-prompt" name="prompt" rows="10" placeholder="Ví dụ: Giúp tôi viết một email thân thiện thông báo về việc cập nhật hệ thống...">${nodeState.config?.prompt || ''}</textarea>`;
             form.appendChild(promptGroup);
             break;
@@ -156,7 +208,12 @@ function initializeAutomationPage() {
             const workflowId = actionTarget.dataset.workflowId; 
             if (action === 'view-workflow') openWorkflowBuilder(workflowId); 
             if (action === 'delete-workflow-card') handleDeleteWorkflow(workflowId); 
-            if (action === 'link-google-automation') { initializeGoogleLink(); if (googleLinkClient) googleLinkClient.requestCode(); } 
+            if (action === 'link-google-automation') { 
+                initializeGoogleLink(); 
+                if (googleLinkClient) {
+                    googleLinkClient.requestCode(); 
+                }
+            } 
             if (action === 'open-automation-app-password-modal') { openModal('appPassword'); } 
         } 
         const handlers = { '#add-workflow-btn': () => openModal('addWorkflow'), '#back-to-workflows-btn': () => { saveCurrentWorkflow(false); showWorkflowList(); }, '#save-workflow-btn': () => saveCurrentWorkflow(true), '#run-automation-btn': () => runAutomation(), }; 
