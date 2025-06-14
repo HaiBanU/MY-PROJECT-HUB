@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xưởng Ảnh AI - HaiBanhU</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/image-studio.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="light-mode">
+    <div id="toast-container"></div>
+    <header>
+        <div class="container">
+            <a href="/page/home.html" class="logo nav-link" data-page="home"><img src="../images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
+            <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
+            <nav>
+                <a href="/page/home.html" class="nav-item nav-link" data-page="home"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                <div id="features-menu" class="dropdown">
+                    <button id="features-menu-btn" class="nav-menu-toggle"><i class="fas fa-th-large"></i><span>Chức năng</span><i class="fas fa-chevron-down"></i></button>
+                    <div id="features-menu-dropdown" class="dropdown-menu hidden">
+                         <a href="/page/projects.html" class="nav-link" data-page="projects"><i class="fas fa-table-columns"></i> Dự án</a>
+                         <a href="/page/automation.html" class="nav-link" data-page="automation"><i class="fas fa-robot"></i> Tự động hóa</a>
+                         <a href="/page/image-studio.html" class="nav-link" data-page="image-studio"><i class="fas fa-palette"></i> Xưởng Ảnh AI</a>
+                    </div>
+                </div>
+                <div id="nav-actions">
+                    <button id="notification-btn" class="nav-icon-btn"><i class="fas fa-bell"></i><span id="notification-count" class="hidden">0</span></button>
+                    <div id="notification-dropdown" class="hidden"></div>
+                    <button id="dark-mode-toggle" class="dark-mode-btn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                </div>
+                <div id="user-menu" class="dropdown hidden">
+                    <button id="user-menu-btn" class="user-menu-toggle"><img id="user-avatar-nav" src="../images/default-avatar.png" alt="User Avatar" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><span id="username-display"></span><i class="fas fa-chevron-down"></i></button>
+                    <div id="user-menu-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header"><span id="dropdown-username"></span><span id="dropdown-email"></span></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="/page/profile.html" class="nav-link" data-page="profile"><i class="fas fa-user-circle"></i> Hồ sơ của bạn</a>
+                        <a href="/page/settings.html" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="container">
+            <div class="page-header-banner">
+                <div class="banner-content">
+                    <h2><i class="fa-solid fa-palette"></i> Xưởng Ảnh AI</h2>
+                    <p>Biến ý tưởng của bạn thành hình ảnh độc đáo. Chỉ cần mô tả, AI sẽ vẽ nên tác phẩm cho bạn.</p>
+                </div>
+            </div>
+
+            <div id="image-studio-view">
+                <aside class="generation-panel">
+                    <h3>Bảng điều khiển</h3>
+                    <form id="image-generation-form">
+                        <div class="form-group">
+                            <label for="image-prompt">Mô tả hình ảnh (bằng tiếng Việt)</label>
+                            <textarea id="image-prompt" rows="5" placeholder="Ví dụ: một phi hành gia đang cưỡi ngựa trên sao Hỏa" required></textarea>
+                            <p class="form-help-text">Mô tả càng chi tiết, kết quả càng chính xác. Bạn có thể dùng tiếng Việt, AI sẽ tự động dịch và tối ưu hóa.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="image-style">Phong cách nghệ thuật</label>
+                            <select id="image-style">
+                                <option value="none">Mặc định (Không có)</option>
+                                <option value="photographic">Nhiếp ảnh</option>
+                                <option value="cinematic">Điện ảnh</option>
+                                <option value="digital-art">Nghệ thuật số</option>
+                                <option value="anime">Anime</option>
+                                <option value="fantasy-art">Nghệ thuật kỳ ảo</option>
+                                <option value="comic-book">Truyện tranh</option>
+                                <option value="low-poly">Low Poly</option>
+                                <option value="pixel-art">Pixel Art</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary full-width">
+                                <i class="fas fa-wand-magic-sparkles"></i>Tạo ảnh
+                            </button>
+                        </div>
+                    </form>
+                </aside>
+                <div class="result-panel">
+                    <div id="image-result-container">
+                        <div class="image-placeholder">
+                            <i class="fa-solid fa-image"></i>
+                            <p>Hình ảnh của bạn sẽ xuất hiện ở đây.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <button id="toggle-sidebar-btn" class="nav-icon-btn hidden"><i class="fas fa-chevron-left"></i></button>
+    <aside id="right-sidebar" class="hidden">
+        <div class="friends-panel">
+            <div class="sidebar-panel-header"><h4><i class="fas fa-user-friends"></i> Bạn bè</h4></div>
+            <div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Người bạn AI</div><div class="friend-status online"></div></div></div>
+        </div>
+    </aside>
+
+    <div id="modal-backdrop" class="hidden"></div>
+    <div id="user-chat-container"></div>
+    <div id="minimized-chats-container"></div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/image-studio.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đang tải - HaiBanhU</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #111827; color: #9CA3AF; }
+        .loader { border: 5px solid #374151; border-radius: 50%; border-top: 5px solid #3B82F6; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+        p { margin-top: 20px; font-size: 1rem; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const inviteCode = urlParams.get('joinProject');
+            if (inviteCode) {
+                sessionStorage.setItem('pendingProjectInvite', inviteCode);
+            }
+            const token = localStorage.getItem('haiBanhU_Token');
+            const user = sessionStorage.getItem('haiBanhU_CurrentUser');
+            if (token && user) {
+                window.location.replace('/page/home.html');
+            } else {
+                window.location.replace('/login.html');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="loader"></div>
+    <p>Đang chuyển hướng, vui lòng chờ...</p>
+</body>
+</html>

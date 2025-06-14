@@ -1,0 +1,90 @@
+/* --- START OF FILE css/home.css --- */
+
+.my-tasks-section {
+    margin-bottom: 4rem;
+    padding: 2rem;
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.my-tasks-section h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.my-tasks-section h2 i {
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+#my-tasks-list {
+    display: grid;
+    gap: 15px;
+}
+
+.my-task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.my-task-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow);
+    border-left-color: var(--primary-hover-color);
+}
+
+.my-task-card .task-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.my-task-card .task-title {
+    font-weight: 600;
+}
+
+.my-task-card .project-name-badge {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-light-color);
+    background-color: var(--card-background-color);
+    padding: 3px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    align-self: flex-start;
+}
+
+.my-task-card .task-meta {
+    flex-shrink: 0;
+    margin-left: 20px;
+}
+
+.my-task-card .task-deadline {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.my-task-card .task-deadline.overdue {
+    color: var(--error-color);
+}
+
+.my-task-card .task-deadline.due-soon {
+    color: var(--accent-alt-color);
+}
+
+.no-tasks-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-light-color);
+}

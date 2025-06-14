@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tự động hóa - HaiBanhU</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/projects.css">
+    <link rel="stylesheet" href="../css/automation.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="light-mode">
+    <div id="toast-container"></div>
+    <header>
+        <div class="container">
+            <a href="/page/home.html" class="logo nav-link" data-page="home"><img src="../images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
+            <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
+            <nav>
+                <a href="/page/home.html" class="nav-item nav-link" data-page="home"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                <div id="features-menu" class="dropdown">
+                    <button id="features-menu-btn" class="nav-menu-toggle"><i class="fas fa-th-large"></i><span>Chức năng</span><i class="fas fa-chevron-down"></i></button>
+                    <div id="features-menu-dropdown" class="dropdown-menu hidden">
+                         <a href="/page/projects.html" class="nav-link" data-page="projects"><i class="fas fa-table-columns"></i> Dự án</a>
+                         <a href="/page/automation.html" class="nav-link" data-page="automation"><i class="fas fa-robot"></i> Tự động hóa</a>
+                         <a href="/page/image-studio.html" class="nav-link" data-page="image-studio"><i class="fas fa-palette"></i> Xưởng Ảnh AI</a>
+                    </div>
+                </div>
+                <div id="nav-actions">
+                    <button id="notification-btn" class="nav-icon-btn"><i class="fas fa-bell"></i><span id="notification-count" class="hidden">0</span></button>
+                    <div id="notification-dropdown" class="hidden"></div>
+                    <button id="dark-mode-toggle" class="dark-mode-btn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                </div>
+                <div id="user-menu" class="dropdown hidden">
+                    <button id="user-menu-btn" class="user-menu-toggle"><img id="user-avatar-nav" src="../images/default-avatar.png" alt="User Avatar" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><span id="username-display"></span><i class="fas fa-chevron-down"></i></button>
+                    <div id="user-menu-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header"><span id="dropdown-username"></span><span id="dropdown-email"></span></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="/page/profile.html" class="nav-link" data-page="profile"><i class="fas fa-user-circle"></i> Hồ sơ của bạn</a>
+                        <a href="/page/settings.html" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="automation-view" class="container">
+            <div id="workflow-list-view">
+                <div class="page-header-banner"><div class="banner-content"><h2><i class="fa-solid fa-robot"></i> Quy trình Tự động hóa</h2><p>Tạo các luồng công việc để tự động hóa các nhiệm vụ lặp đi lặp lại.</p></div><button id="add-workflow-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Tạo quy trình mới</button></div>
+                <details class="automation-config-details" open><summary class="automation-config-summary"><h3><i class="fa-solid fa-link"></i> Cấu hình Liên kết</h3><div class="summary-arrow"><i class="fa-solid fa-chevron-down"></i></div></summary><div class="automation-config-content"><div class="config-section"><h4><i class="fa-brands fa-google"></i> Liên kết Google</h4><p class="form-help-text">Để sử dụng các hành động liên quan đến Google (như Gửi Gmail).</p><div class="connection-item"><div class="connection-info"><i id="automation-gmail-req-1-icon" class="fa-regular fa-circle"></i><span>Liên kết tài khoản</span></div><button id="automation-gmail-req-1-btn" class="btn btn-primary btn-sm" data-action="link-google-automation">Liên kết</button></div><div class="connection-item"><div class="connection-info"><i id="automation-gmail-req-2-icon" class="fa-regular fa-circle"></i><span>Mật khẩu Cấp 2</span></div><button id="automation-gmail-req-2-btn" class="btn btn-primary btn-sm" data-action="open-automation-app-password-modal">Cung cấp</button></div></div></div></details>
+                <div id="workflow-list" class="grid-container"></div>
+            </div>
+            <div id="automation-builder-view" class="hidden">
+                <div class="automation-header"><button id="back-to-workflows-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</button><h2 id="workflow-title-display"></h2><div class="header-actions"><button id="save-workflow-btn" class="btn btn-secondary"><i class="fas fa-save"></i> Lưu</button><button id="run-automation-btn" class="btn btn-success"><i class="fa-solid fa-play"></i> Chạy</button></div></div>
+                <p class="automation-desc">Kéo các khối vào, nhấp đúp để cấu hình và nối chúng lại.</p>
+                <div class="automation-builder">
+                    <div class="automation-nodes"><h4><i class="fa-solid fa-bolt"></i> Điểm Bắt Đầu</h4><div class="node trigger" draggable="true" data-type="manual"><i class="fa-solid fa-hand-pointer"></i> Bắt đầu thủ công</div><h4 style="margin-top: 20px;"><i class="fa-solid fa-paper-plane"></i> Hành Động</h4><div class="node action" draggable="true" data-type="email"><i class="fa-solid fa-envelope"></i> Gửi Gmail</div><div class="node action" draggable="true" data-type="ai-agent"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Agent</div></div>
+                    <div class="automation-canvas" id="automation-canvas"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <button id="toggle-sidebar-btn" class="nav-icon-btn hidden"><i class="fas fa-chevron-left"></i></button>
+    <aside id="right-sidebar" class="hidden">
+        <div class="friends-panel">
+            <div class="sidebar-panel-header"><h4><i class="fas fa-user-friends"></i> Bạn bè</h4></div>
+            <div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Người bạn AI</div><div class="friend-status online"></div></div></div>
+        </div>
+    </aside>
+
+    <div id="modal-backdrop" class="hidden"></div>
+    <div id="add-workflow-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Tạo quy trình mới</h3><form id="add-workflow-form"><div class="form-group"><label for="workflow-name">Tên quy trình</label><input id="workflow-name" type="text" placeholder="Ví dụ: Gửi email marketing hàng tuần" required></div><button type="submit" class="btn btn-primary full-width">Tạo quy trình</button></form></div>
+    <div id="app-password-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Cung cấp Mật khẩu Cấp 2</h3><p class="form-help-text">Mật khẩu Cấp 2 là một mã 16 ký tự. <a href="https://myaccount.google.com/apppasswords" target="_blank">Nhấn vào đây để tạo.</a></p><form id="automation-app-password-form"><div class="form-group"><label for="automation-app-password">Nhập Mật khẩu Cấp 2 (16 ký tự)</label><input type="password" id="automation-app-password" placeholder="xxxxxxxxxxxxxxxx" required></div><div class="form-actions"><button type="submit" class="btn btn-primary full-width">Lưu Mật khẩu</button></div></form></div>
+    <div id="action-config-modal" class="modal modal-lg hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3 id="action-modal-title">Cấu hình hành động</h3><input type="hidden" id="action-node-id"><div id="action-config-content"></div></div>
+    <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
+    
+    <div id="user-chat-container"></div>
+    <div id="chat-box-template" class="chat-box hidden">
+        <div class="chat-box-header">
+            <div class="chat-box-recipient">
+                <div class="chat-box-header-avatar"></div>
+                <span class="chat-box-title"></span>
+            </div>
+            <div class="chat-box-controls">
+                <button class="chat-header-btn minimize-btn" title="Thu nhỏ"><i class="fas fa-minus"></i></button>
+                <button class="chat-header-btn chat-close-btn" title="Đóng"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="chat-box-content">
+            <div class="chat-box-messages"></div>
+            <div class="chat-box-input-area">
+                <div class="chat-input-prefix-actions">
+                    <button class="chat-action-btn" data-chat-action="attach-file" title="Đính kèm tệp"><i class="fas fa-paperclip"></i></button>
+                    <button class="chat-action-btn" data-chat-action="send-image" title="Gửi ảnh"><i class="fas fa-image"></i></button>
+                </div>
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea>
+                </div>
+                <button class="chat-action-btn send-btn" title="Gửi"><i class="fas fa-paper-plane"></i></button>
+                <input type="file" class="hidden" data-chat-action-input="file">
+                <input type="file" class="hidden" data-chat-action-input="image" accept="image/*">
+            </div>
+        </div>
+    </div>
+    <div id="minimized-chats-container"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/leader-line-new@1.1.9/leader-line.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/automation.js"></script>
+</body>
+</html>

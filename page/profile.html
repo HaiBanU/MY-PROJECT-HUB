@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ - HaiBanhU</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="light-mode">
+    <div id="toast-container"></div>
+    <header>
+        <div class="container">
+            <a href="/page/home.html" class="logo nav-link" data-page="home"><img src="../images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
+            <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
+            <nav>
+                <a href="/page/home.html" class="nav-item nav-link" data-page="home"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                <div id="features-menu" class="dropdown">
+                    <button id="features-menu-btn" class="nav-menu-toggle"><i class="fas fa-th-large"></i><span>Chức năng</span><i class="fas fa-chevron-down"></i></button>
+                    <div id="features-menu-dropdown" class="dropdown-menu hidden">
+                         <a href="/page/projects.html" class="nav-link" data-page="projects"><i class="fas fa-table-columns"></i> Dự án</a>
+                         <a href="/page/automation.html" class="nav-link" data-page="automation"><i class="fas fa-robot"></i> Tự động hóa</a>
+                         <a href="/page/image-studio.html" class="nav-link" data-page="image-studio"><i class="fas fa-palette"></i> Xưởng Ảnh AI</a>
+                    </div>
+                </div>
+                <div id="nav-actions">
+                    <button id="notification-btn" class="nav-icon-btn"><i class="fas fa-bell"></i><span id="notification-count" class="hidden">0</span></button>
+                    <div id="notification-dropdown" class="hidden"></div>
+                    <button id="dark-mode-toggle" class="dark-mode-btn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                </div>
+                <div id="user-menu" class="dropdown hidden">
+                    <button id="user-menu-btn" class="user-menu-toggle"><img id="user-avatar-nav" src="../images/default-avatar.png" alt="User Avatar" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><span id="username-display"></span><i class="fas fa-chevron-down"></i></button>
+                    <div id="user-menu-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header"><span id="dropdown-username"></span><span id="dropdown-email"></span></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="/page/profile.html" class="nav-link" data-page="profile"><i class="fas fa-user-circle"></i> Hồ sơ của bạn</a>
+                        <a href="/page/settings.html" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="profile-view" class="container">
+            <div class="page-header-banner"><div class="banner-content"><h2><i class="fa-solid fa-user-pen"></i> Chỉnh sửa Hồ sơ</h2><p>Quản lý thông tin cá nhân của bạn để mọi người có thể tìm thấy và kết nối.</p></div></div>
+            <div class="profile-grid-single">
+                <div class="profile-card">
+                    <h3>Thông tin cá nhân</h3>
+                    <form id="profile-form">
+                        <div class="profile-avatar-section"><input type="file" id="avatar-upload-input" class="file-input" accept="image/*"><label for="avatar-upload-input" class="profile-avatar-wrapper"><img id="profile-avatar-img" src="../images/default-avatar.png" alt="Ảnh đại diện" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><div class="profile-avatar-overlay"><i class="fas fa-camera"></i><span>Thay đổi</span></div></label></div>
+                        <div class="form-group"><label for="profile-name">Tên hiển thị</label><input type="text" id="profile-name" required></div>
+                        <div class="form-group"><label for="profile-email">Email</label><input type="email" id="profile-email" disabled></div>
+                        <div class="form-group"><label for="profile-bio">Giới thiệu ngắn (Bio)</label><textarea id="profile-bio" rows="4" placeholder="Ví dụ: Lập trình viên Full-stack..."></textarea></div>
+                        <div class="form-group"><label for="profile-skills">Kỹ năng (phân cách bởi dấu phẩy)</label><input type="text" id="profile-skills" placeholder="Ví dụ: JavaScript, React, Node.js"></div>
+                        <div class="form-actions"><button type="submit" class="btn btn-primary full-width">Lưu thông tin</button></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <button id="toggle-sidebar-btn" class="nav-icon-btn hidden"><i class="fas fa-chevron-left"></i></button>
+    <aside id="right-sidebar" class="hidden">
+        <div class="friends-panel">
+            <div class="sidebar-panel-header"><h4><i class="fas fa-user-friends"></i> Bạn bè</h4></div>
+            <div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Người bạn AI</div><div class="friend-status online"></div></div></div>
+        </div>
+    </aside>
+
+    <div id="modal-backdrop" class="hidden"></div>
+    <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
+    
+    <div id="user-chat-container"></div>
+    <div id="chat-box-template" class="chat-box hidden">
+        <div class="chat-box-header">
+            <div class="chat-box-recipient">
+                <div class="chat-box-header-avatar"></div>
+                <span class="chat-box-title"></span>
+            </div>
+            <div class="chat-box-controls">
+                <button class="chat-header-btn minimize-btn" title="Thu nhỏ"><i class="fas fa-minus"></i></button>
+                <button class="chat-header-btn chat-close-btn" title="Đóng"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="chat-box-content">
+            <div class="chat-box-messages"></div>
+            <div class="chat-box-input-area">
+                <div class="chat-input-prefix-actions">
+                    <button class="chat-action-btn" data-chat-action="attach-file" title="Đính kèm tệp"><i class="fas fa-paperclip"></i></button>
+                    <button class="chat-action-btn" data-chat-action="send-image" title="Gửi ảnh"><i class="fas fa-image"></i></button>
+                </div>
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea>
+                </div>
+                <button class="chat-action-btn send-btn" title="Gửi"><i class="fas fa-paper-plane"></i></button>
+                <input type="file" class="hidden" data-chat-action-input="file">
+                <input type="file" class="hidden" data-chat-action-input="image" accept="image/*">
+            </div>
+        </div>
+    </div>
+    <div id="minimized-chats-container"></div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html>

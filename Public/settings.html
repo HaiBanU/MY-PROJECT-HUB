@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt - HaiBanhU</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="light-mode">
+
+    <div id="toast-container"></div>
+    <header>
+        <div class="container">
+            <a href="app.html" class="logo"><img src="images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
+            <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
+            <nav>
+                <a href="app.html" class="nav-item"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                <div id="features-menu" class="dropdown">
+                    <button id="features-menu-btn" class="nav-menu-toggle"><i class="fas fa-th-large"></i><span>Chức năng</span><i class="fas fa-chevron-down"></i></button>
+                    <div id="features-menu-dropdown" class="dropdown-menu hidden">
+                         <a href="projects.html"><i class="fas fa-table-columns"></i> Dự án</a>
+                         <a href="automation.html"><i class="fas fa-robot"></i> Tự động hóa</a>
+                    </div>
+                </div>
+                <div id="nav-actions">
+                    <button id="notification-btn" class="nav-icon-btn"><i class="fas fa-bell"></i><span id="notification-count" class="hidden">0</span></button>
+                    <div id="notification-dropdown" class="hidden"></div>
+                    <button id="dark-mode-toggle" class="dark-mode-btn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                </div>
+                <div id="user-menu" class="dropdown hidden">
+                    <button id="user-menu-btn" class="user-menu-toggle"><img id="user-avatar-nav" src="images/default-avatar.png" alt="User Avatar"><span id="username-display"></span><i class="fas fa-chevron-down"></i></button>
+                    <div id="user-menu-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header"><span id="dropdown-username"></span><span id="dropdown-email"></span></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="profile.html"><i class="fas fa-user-circle"></i> Hồ sơ của bạn</a>
+                        <a href="settings.html"><i class="fas fa-cog"></i> Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="settings-view" class="container">
+            <div class="page-header-banner">
+                <div class="banner-content"><h2><i class="fa-solid fa-cog"></i> Cài đặt Tài khoản</h2><p>Quản lý mật khẩu và các thông tin bảo mật khác của bạn.</p></div>
+            </div>
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h3>Đổi mật khẩu</h3>
+                    <form id="change-password-form"><div class="form-group"><label for="current-password">Mật khẩu hiện tại</label><input type="password" id="current-password" required></div><div class="form-group"><label for="new-password">Mật khẩu mới</label><input type="password" id="new-password" required></div><div class="form-group"><label for="confirm-new-password">Xác nhận mật khẩu mới</label><input type="password" id="confirm-new-password" required></div><div class="form-actions"><button type="submit" class="btn btn-primary full-width">Lưu Mật khẩu</button></div></form>
+                </div>
+                <div class="profile-card">
+                    <h3>Vùng Nguy hiểm</h3>
+                    <div id="danger-zone"><h4>Xóa tài khoản</h4><p>Hành động này không thể hoàn tác. Toàn bộ dự án, quy trình và dữ liệu của bạn sẽ bị xóa vĩnh viễn.</p><button id="delete-account-btn" class="btn btn-danger">Xóa tài khoản của tôi</button></div>
+                </div>
+            </div>
+        </section>
+        <section id="search-results-view" class="container hidden"><h2>Kết quả tìm kiếm cho "<span id="search-query-display"></span>"</h2><div id="search-results-container"></div></section>
+    </main>
+    
+    <button id="toggle-sidebar-btn" class="nav-icon-btn hidden"><i class="fas fa-chevron-left"></i></button>
+    <aside id="right-sidebar" class="hidden">
+        <div class="friends-panel"><div class="sidebar-panel-header"><h4><i class="fas fa-user-friends"></i> Bạn bè</h4></div><div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Trợ lý AI</div><div class="friend-status online"></div></div></div></div>
+    </aside>
+
+    <div id="modal-backdrop" class="hidden"></div>
+    <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
+    
+    <div id="user-chat-container"></div>
+    <div id="chat-box-template" class="chat-box hidden"><div class="chat-box-header"><div class="chat-box-recipient"><div class="chat-box-header-avatar"></div><span class="chat-box-title"></span></div><div class="chat-box-controls"><button class="chat-header-btn minimize-btn"><i class="fas fa-minus"></i></button><button class="chat-header-btn chat-close-btn"><i class="fas fa-times"></i></button></div></div><div class="chat-box-content"><div class="chat-box-messages"></div><div class="chat-box-input"><label class="chat-action-btn attachment-btn"><i class="fas fa-paperclip"></i><input type="file" class="hidden chat-file-input"></label><div class="chat-input-wrapper"><textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea></div><button class="chat-action-btn send-btn"><i class="fas fa-paper-plane"></i></button></div></div></div>
+    <div id="minimized-chats-container"></div>
+
+   <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/projects.js"></script>
+    <!-- Hàm runApp() từ main.js sẽ được gọi cuối cùng để khởi tạo mọi thứ -->
+    <script>runApp();</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - HaiBanhU</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <!-- <<< MỚI: Thêm CSS cho trang chủ >>> -->
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="light-mode">
+    <div id="toast-container"></div>
+    <header>
+        <div class="container">
+            <a href="/page/home.html" class="logo nav-link" data-page="home"><img src="../images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
+            <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
+            <nav>
+                <a href="/page/home.html" class="nav-item nav-link" data-page="home"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                <div id="features-menu" class="dropdown">
+                    <button id="features-menu-btn" class="nav-menu-toggle"><i class="fas fa-th-large"></i><span>Chức năng</span><i class="fas fa-chevron-down"></i></button>
+                    <div id="features-menu-dropdown" class="dropdown-menu hidden">
+                         <a href="/page/projects.html" class="nav-link" data-page="projects"><i class="fas fa-table-columns"></i> Dự án</a>
+                         <a href="/page/automation.html" class="nav-link" data-page="automation"><i class="fas fa-robot"></i> Tự động hóa</a>
+                         <a href="/page/image-studio.html" class="nav-link" data-page="image-studio"><i class="fas fa-palette"></i> Xưởng Ảnh AI</a>
+                    </div>
+                </div>
+                <div id="nav-actions">
+                    <button id="notification-btn" class="nav-icon-btn"><i class="fas fa-bell"></i><span id="notification-count" class="hidden">0</span></button>
+                    <div id="notification-dropdown" class="hidden"></div>
+                    <button id="dark-mode-toggle" class="dark-mode-btn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                </div>
+                <div id="user-menu" class="dropdown hidden">
+                    <button id="user-menu-btn" class="user-menu-toggle"><img id="user-avatar-nav" src="../images/default-avatar.png" alt="User Avatar" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><span id="username-display"></span><i class="fas fa-chevron-down"></i></button>
+                    <div id="user-menu-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header"><span id="dropdown-username"></span><span id="dropdown-email"></span></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="/page/profile.html" class="nav-link" data-page="profile"><i class="fas fa-user-circle"></i> Hồ sơ của bạn</a>
+                        <a href="/page/settings.html" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home-view">
+            <div class="home-hero new-design">
+                <div class="hero-background-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                </div>
+                <div class="container hero-container">
+                    <div class="hero-content">
+                        <h1 id="home-welcome-message">Chào mừng trở lại!</h1>
+                        <p>Đây là trung tâm chỉ huy của bạn. Hãy bắt đầu một ngày làm việc hiệu quả.</p>
+                        <div class="hero-actions">
+                            <a href="/page/projects.html" class="btn btn-primary"><i class="fas fa-plus"></i> Dự án mới</a>
+                            <a href="/page/automation.html" class="btn btn-secondary">Tạo quy trình</a>
+                        </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="stat-projects">0</span>
+                            <span class="stat-label">Dự án đang chạy</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="stat-tasks">0</span>
+                            <span class="stat-label">Công việc cần làm</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="stat-friends">0</span>
+                            <span class="stat-label">Bạn bè & kết nối</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container page-content">
+                <!-- <<< MỚI: Thêm khu vực "Công việc của tôi" >>> -->
+                <div class="my-tasks-section">
+                    <h2><i class="fas fa-tasks"></i> Công việc của tôi</h2>
+                    <div id="my-tasks-list">
+                        <!-- Các công việc sẽ được JS render vào đây -->
+                    </div>
+                </div>
+
+                <div class="home-grid">
+                    <a href="/page/projects.html" class="home-card"><i class="fas fa-table-columns"></i><h3>Quản lý Dự án</h3><p>Tạo, theo dõi và quản lý mọi dự án của bạn với bảng Kanban trực quan.</p></a>
+                    <a href="/page/automation.html" class="home-card"><i class="fas fa-robot"></i><h3>Tự động hóa</h3><p>Thiết kế các quy trình tự động để gửi email, đăng bài và hơn thế nữa.</p></a>
+                    <a href="/page/image-studio.html" class="home-card"><i class="fas fa-palette"></i><h3>Xưởng Ảnh AI</h3><p>Biến mọi ý tưởng và mô tả của bạn thành những hình ảnh độc đáo và sáng tạo.</p></a>
+                </div>
+                <div class="feature-section">
+                    <div class="feature-text">
+                        <h2>Nền tảng All-in-One cho Hiệu suất Tối đa</h2>
+                        <p>HaiBanhU không chỉ là một công cụ, mà là một không gian làm việc số toàn diện. Chúng tôi kết hợp những gì tốt nhất của quản lý công việc, tự động hóa và mạng xã hội chuyên nghiệp để giúp bạn và đội nhóm của mình đạt được những mục tiêu lớn lao.</p>
+                        <ul><li><i class="fas fa-check-circle"></i> <strong>Quản lý Trực quan:</strong> Kéo-thả công việc qua các cột trạng thái trên bảng Kanban, giúp bạn luôn nắm bắt được tiến độ tổng thể.</li><li><i class="fas fa-check-circle"></i> <strong>Cộng tác Liền mạch:</strong> Mời thành viên, chia sẻ tài liệu và giao tiếp ngay trong không gian dự án.</li><li><i class="fas fa-check-circle"></i> <strong>Tự động hóa Thông minh:</strong> Loại bỏ các tác vụ thủ công nhàm chán, để bạn có thêm thời gian cho những công việc mang tính chiến lược.</li></ul>
+                    </div>
+                    <div class="feature-image"><video autoplay loop muted playsinline><source src="../videos/feature-video.mp4" type="video/mp4"></video></div>
+                </div>
+                 <div class="feature-section">
+                    <div class="feature-image"><img src="../images/home-feature-ai.png" alt="AI Assistant"></div>
+                    <div class="feature-text">
+                        <h2>Gặp gỡ người bạn đồng hành AI, HaiBanhU</h2>
+                        <p>HaiBanhU không chỉ là một trợ lý ảo. Đó là một người bạn đồng hành được tích hợp sâu vào hệ thống, sẵn sàng giúp bạn từ những công việc phức tạp đến những cuộc trò chuyện đơn giản. Bạn có thể:</p>
+                        <ul><li><i class="fas fa-check-circle"></i> <strong>Cùng bạn soạn thảo:</strong> Từ email, báo cáo dự án đến các bài đăng trên mạng xã hội.</li><li><i class="fas fa-check-circle"></i> <strong>Hỏi đáp & tóm tắt:</strong> Yêu cầu tóm tắt các cuộc trò chuyện dài hoặc hỏi về bất cứ điều gì bạn thắc mắc.</li><li><i class="fas fa-check-circle"></i> <strong>Trò chuyện & lên ý tưởng:</strong> Cần một vài ý tưởng cho chiến dịch sắp tới hay chỉ đơn giản là muốn trò chuyện? Hãy bắt đầu với HaiBanhU.</li></ul>
+                        <p>Với khả năng hiểu ngữ cảnh từ dữ liệu dự án của bạn, người bạn AI này sẽ mang đến những phản hồi chính xác và phù hợp nhất.</p>
+                    </div>
+                </div>
+                <div class="feature-section">
+                    <div class="feature-text">
+                        <h2>Mở rộng Mạng lưới, Tìm kiếm Cơ hội</h2>
+                        <p>HaiBanhU còn là một cộng đồng của những cá nhân tài năng và các đội nhóm năng động. Hãy xây dựng hồ sơ chuyên nghiệp của bạn và kết nối với những người khác:</p>
+                         <ul><li><i class="fas fa-check-circle"></i> <strong>Hồ sơ Chuyên nghiệp:</strong> Trưng bày các kỹ năng và dự án bạn đã hoàn thành để thu hút nhà tuyển dụng hoặc đối tác tiềm năng.</li><li><i class="fas fa-check-circle"></i> <strong>Tìm kiếm Thông minh:</strong> Dễ dàng tìm kiếm các chuyên gia theo kỹ năng hoặc từ khóa cụ thể cho dự án của bạn.</li><li><i class="fas fa-check-circle"></i> <strong>Kết bạn & Trò chuyện:</strong> Giao lưu, học hỏi và chia sẻ kinh nghiệm với những người cùng chí hướng.</li></ul>
+                    </div>
+                    <div class="feature-image"><img src="../images/home-feature-network.png" alt="Social Network"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <button id="toggle-sidebar-btn" class="nav-icon-btn hidden"><i class="fas fa-chevron-left"></i></button>
+    <aside id="right-sidebar" class="hidden">
+        <div class="friends-panel">
+            <div class="sidebar-panel-header"><h4><i class="fas fa-user-friends"></i> Bạn bè</h4></div>
+            <div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Người bạn AI</div><div class="friend-status online"></div></div></div>
+        </div>
+    </aside>
+
+    <div id="modal-backdrop" class="hidden"></div>
+    <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
+    
+    <div id="user-chat-container"></div>
+    <div id="chat-box-template" class="chat-box hidden">
+        <div class="chat-box-header">
+            <div class="chat-box-recipient">
+                <div class="chat-box-header-avatar"></div>
+                <span class="chat-box-title"></span>
+            </div>
+            <div class="chat-box-controls">
+                <button class="chat-header-btn minimize-btn" title="Thu nhỏ"><i class="fas fa-minus"></i></button>
+                <button class="chat-header-btn chat-close-btn" title="Đóng"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="chat-box-content">
+            <div class="chat-box-messages"></div>
+            <div class="chat-box-input-area">
+                <div class="chat-input-prefix-actions">
+                    <button class="chat-action-btn" data-chat-action="attach-file" title="Đính kèm tệp"><i class="fas fa-paperclip"></i></button>
+                    <button class="chat-action-btn" data-chat-action="send-image" title="Gửi ảnh"><i class="fas fa-image"></i></button>
+                </div>
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea>
+                </div>
+                <button class="chat-action-btn send-btn" title="Gửi"><i class="fas fa-paper-plane"></i></button>
+                <input type="file" class="hidden" data-chat-action-input="file">
+                <input type="file" class="hidden" data-chat-action-input="image" accept="image/*">
+            </div>
+        </div>
+    </div>
+    <div id="minimized-chats-container"></div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/profile.js"></script>
+    <script src="../js/search.js"></script>
+    <!-- <<< MỚI: Thêm script cho trang chủ >>> -->
+    <script src="../js/home.js"></script>
+</body>
+</html>

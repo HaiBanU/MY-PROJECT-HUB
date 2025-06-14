@@ -1,0 +1,238 @@
+/* --- START OF FILE css/projects.css --- (RE-DESIGNED FOR DOCS & MEMBERS TAB) */
+
+/* ==========================================================================
+   PROJECTS & WORKFLOWS (CARD STYLES)
+   ========================================================================== */
+.grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.project-card, .workflow-card, .doc-list-card { 
+    background-color: var(--card-background-color); 
+    border-radius: var(--border-radius); 
+    box-shadow: var(--shadow); 
+    border: 1px solid var(--border-color); 
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s, border-left-color 0.3s; 
+    animation: fadeIn 0.5s ease-out backwards; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-left: 4px solid transparent; 
+}
+.project-card:hover, .workflow-card:hover, .doc-list-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: var(--shadow-hover); 
+    border-color: var(--primary-color);
+}
+.workflow-card.status-success { border-left-color: var(--success-color); }
+.workflow-card.status-error { border-left-color: var(--error-color); }
+
+.card-body { padding: 25px; flex-grow: 1; cursor: pointer; }
+.card-body h3 { color: var(--text-color); margin-bottom: 10px; font-size: 1.25rem; } 
+.card-body p { font-size: 14px; color: var(--text-light-color); margin-bottom: 20px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; } 
+.card-actions { padding: 15px 25px; background-color: var(--background-color); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+body.dark-mode .card-actions { background-color: var(--card-background-color); border-color: #374151; }
+.card-actions .btn { padding: 6px 16px; font-size: 14px; }
+.progress-container { flex-grow: 1; margin-top: auto; }
+.progress-bar { width: 100%; height: 8px; background-color: var(--border-color); border-radius: 4px; overflow: hidden; margin-top: 5px; } 
+.progress { height: 100%; background: linear-gradient(90deg, var(--gradient-end), var(--gradient-start)); border-radius: 4px; } 
+.progress-text { font-size: 12px; font-weight: 600; color: var(--text-light-color); } 
+.project-deadline { font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+.project-deadline.overdue { color: var(--error-color); background-color: rgba(239, 68, 68, 0.1); } 
+.project-deadline.due-soon { color: var(--accent-alt-color); background-color: rgba(249, 115, 22, 0.1); }
+.workflow-card-footer { font-size: 14px; display: flex; align-items: center; gap: 8px; }
+
+/* ==========================================================================
+   PROJECT DETAIL
+   ========================================================================== */
+.project-detail-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 1rem; }
+.project-title-container { flex-grow: 1; text-align: center; }
+#project-title { margin: 0; }
+#project-member-avatars { display: flex; justify-content: center; margin-top: 10px; }
+.member-avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--card-background-color); background-color: var(--border-color); color: var(--text-light-color); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; overflow: hidden; box-shadow: var(--shadow); }
+.member-avatar:not(:first-child) { margin-left: -12px; }
+.member-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.project-header-actions { display: flex; gap: 10px; }
+#project-settings-btn { padding-left: 12px; padding-right: 12px; }
+
+.project-nav { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 2rem; }
+.project-nav-btn { background: none; border: none; padding: 1rem 1.5rem; font-size: 1rem; font-weight: 600; color: var(--text-light-color); cursor: pointer; position: relative; transition: color 0.2s; }
+.project-nav-btn.active { color: var(--primary-color); }
+.project-nav-btn::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background-color: var(--primary-color); transform: scaleX(0); transition: transform 0.3s ease-out; }
+.project-nav-btn.active::after { transform: scaleX(1); }
+.project-tab-content { display: none; }
+.project-tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+/* ==========================================================================
+   TASK BOARD (KANBAN)
+   ========================================================================== */
+.task-board { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; align-items: flex-start; }
+.task-column { flex: 1 0 320px; max-width: 320px; background-color: var(--background-color); border-radius: var(--border-radius); padding: 15px; border: 1px solid var(--border-color); animation: fadeIn 0.5s ease-out backwards; }
+.task-column-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 5px; } 
+.task-column-header h3 { font-size: 1rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; color: var(--text-light-color); } 
+.add-task-btn { background: none; border: 1px dashed var(--border-color); font-size: 16px; color: var(--text-light-color); cursor: pointer; border-radius: 50%; width: 32px; height: 32px; transition: all 0.2s; } 
+.add-task-btn:hover { background-color: var(--primary-color); color: white; border-style: solid; border-color: var(--primary-color); }
+.task-list { min-height: 100px; display: flex; flex-direction: column; gap: 12px; } 
+.task-card { background-color: var(--card-background-color); border-left: 4px solid var(--primary-color); animation: fadeIn 0.4s ease-out; padding: 15px; border-radius: 8px; box-shadow: var(--shadow); position: relative; transition: transform 0.2s, box-shadow 0.2s; }
+.task-card.is-overdue { border-left-color: var(--error-color); background-color: #fef2f2; }
+body.dark-mode .task-card.is-overdue { background-color: #492828; }
+.task-card.is-completed { border-left-color: var(--success-color); opacity: 0.8; }
+.task-card:hover { transform: translateY(-3px) scale(1.02); box-shadow: var(--shadow-hover); z-index: 5; }
+.task-card p.task-title-clickable { margin: 0 0 10px 0; font-weight: 600; cursor: pointer; }
+.task-card-footer { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; font-size: 12px; color: var(--text-light-color); }
+.task-card-info { display: flex; flex-wrap: wrap; gap: 10px; align-items: center;}
+.task-card-actions { position: absolute; bottom: 10px; right: 10px; display: flex; gap: 5px; opacity: 0; transition: opacity 0.2s; }
+.task-card:hover .task-card-actions { opacity: 1; }
+.task-action-btn { background-color: var(--background-color); border: 1px solid var(--border-color); color: var(--text-light-color); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+.task-action-btn:hover { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+.due-date { display: flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; font-weight: 500; } 
+.due-date.overdue { color: var(--error-color); background-color: rgba(239, 68, 68, 0.1); } 
+.due-date.due-soon { color: var(--accent-color); background-color: rgba(167, 139, 250, 0.1); } 
+.tags-container { display: flex; flex-wrap: wrap; gap: 6px; }
+.task-attachment { display: flex; align-items: center; gap: 5px; color: var(--primary-color); font-weight: 500; }
+.task-attachment a { color: inherit; text-decoration: none; }
+.task-attachment a:hover { color: var(--primary-hover-color); text-decoration: underline; }
+.task-attachment i { font-size: 14px; }
+
+/* ==========================================================================
+   DOCUMENT TAB
+   ========================================================================== */
+#project-tab-docs .docs-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.doc-list-card { cursor: pointer; border-left-color: var(--info-color); }
+.doc-list-card .card-body p { height: auto; -webkit-line-clamp: unset; }
+.doc-list-card .fa-file-lines { font-size: 1.5rem; color: var(--info-color); margin-bottom: 1rem; }
+.doc-card-meta { display: flex; flex-wrap: wrap; gap: 15px; color: var(--text-light-color); font-size: 13px; }
+
+/* ==========================================================================
+   MEMBERS TAB
+   ========================================================================== */
+#project-tab-members h3 { margin-bottom: 1.5rem; }
+#member-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+.member-list-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    padding: 15px;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+.member-list-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; position: relative; flex-shrink: 0; }
+.member-list-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.owner-crown { position: absolute; top: -8px; right: -5px; color: #ffc700; font-size: 1rem; text-shadow: 0 0 5px black; transform: rotate(15deg); }
+.member-list-name { font-weight: 600; }
+
+
+/* ==========================================================================
+   INVITE MODAL STYLES
+   ========================================================================== */
+#invite-user-list-container { margin-top: 15px; max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 5px; }
+.invite-user-item { display: flex; align-items: center; padding: 10px; border-radius: 8px; transition: background-color 0.2s; }
+.invite-user-item:hover { background-color: var(--background-color); }
+.invite-user-info { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
+.invite-user-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; }
+.invite-user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.invite-user-name { font-weight: 600; }
+.invite-user-item .btn { padding: 6px 14px; font-size: 14px; }
+.invite-link-wrapper { display: flex; gap: 10px; }
+.invite-link-wrapper input { flex-grow: 1; }
+/* ==========================================================================
+   ASSIGN MEMBER POPOVER STYLES
+   ========================================================================== */
+.assignee-container {
+    position: relative;
+}
+
+.selected-assignees {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 46px; /* Bằng chiều cao của input bình thường */
+    padding: 8px;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    align-items: center;
+}
+body.dark-mode .selected-assignees {
+    background-color: #2b3544;
+}
+
+.selected-assignee-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.selected-assignee-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.assignee-placeholder {
+    color: var(--text-light-color);
+    margin-left: 5px;
+}
+
+#assign-member-btn {
+    margin-top: 10px;
+}
+
+.assignee-popover {
+    display: none; /* Mặc định ẩn */
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-hover);
+    z-index: 1700; /* Cao hơn modal */
+    animation: fadeIn 0.2s ease-out;
+}
+
+.assignee-popover.active {
+    display: block;
+}
+
+.assignee-popover-list .member-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.assignee-popover-list .member-item:hover {
+    background-color: var(--background-color);
+}
+
+.assignee-popover-list .member-item input[type="checkbox"] {
+    margin-right: 12px;
+    width: 16px;
+    height: 16px;
+}
+
+.assignee-popover-list .member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 12px;
+}
+
+.assignee-popover-list .member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.assignee-popover-list .member-name {
+    font-weight: 500;
+}

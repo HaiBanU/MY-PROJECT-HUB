@@ -1,0 +1,108 @@
+<!-- --- START OF FILE login.html --- -->
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - HaiBanhU</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="light-mode welcome-active">
+
+    <div id="toast-container"></div>
+
+    <main>
+        <section id="welcome-screen">
+            <div class="welcome-video-background">
+                <video src="videos/welcome-video.mp4" autoplay muted loop playsinline></video>
+                <div class="welcome-overlay"></div>
+            </div>
+            <header class="welcome-header">
+                <div class="container">
+                    <nav class="welcome-nav">
+                        <a href="#" data-modal="login">Đăng nhập</a>
+                        <a href="#" data-modal="register" class="btn btn-primary">Bắt đầu</a>
+                    </nav>
+                </div>
+            </header>
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Giải Phóng Sức Mạnh,<br>Tự Động Hóa Tương Lai</h1>
+                    <p>Biến ý tưởng thành hành động, các quy trình phức tạp thành những luồng tự động mượt mà. HaiBanhU là nơi bạn tập trung vào chiến lược, để công nghệ lo phần còn lại.</p>
+                    <div class="hero-buttons">
+                        <a href="#" data-modal="register" class="btn btn-primary btn-large">Bắt đầu Miễn phí</a>
+                        <a href="#" data-modal="login" class="btn btn-secondary btn-large">Tôi đã có tài khoản</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="auth-container" class="hidden">
+        <div class="auth-video-background">
+            <video src="videos/background-video.mp4" autoplay muted loop playsinline></video>
+        </div>
+        <div class="auth-overlay"></div>
+        <div class="auth-box">
+            <button id="close-auth-btn" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-content-wrapper">
+                <div class="auth-info">
+                    <h2 class="gradient-text">Nền Tảng Cho Người Dẫn Đầu</h2>
+                    <p>Tích hợp, tự động hóa và phát triển doanh nghiệp của bạn với bộ công cụ mạnh mẽ nhất.</p>
+                    <ul class="auth-features">
+                        <li><i class="fa-solid fa-table-columns"></i> Quản lý dự án & công việc trực quan</li>
+                        <li><i class="fa-solid fa-robot"></i> Xây dựng quy trình tự động không cần code</li>
+                        <li><i class="fa-solid fa-headset"></i> Trợ lý AI thông minh tích hợp sẵn</li>
+                    </ul>
+                </div>
+                <div class="auth-form-container">
+                    <form id="login-form" class="auth-form">
+                        <h3>Đăng nhập</h3>
+                        
+                        <div class="form-group">
+                            <label for="login-username">Tên tài khoản</label>
+                            <input id="login-username" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Mật khẩu</label>
+                            <input id="login-password" type="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width">Đăng nhập</button>
+                        <p class="form-switch">Chưa có tài khoản? <a href="#" data-auth-action="show-register">Đăng ký</a></p>
+                    </form>
+                    <form id="register-form" class="auth-form">
+                        <h3>Tạo tài khoản mới</h3>
+                        
+                        <div class="form-group">
+                            <label for="register-name">Tên của bạn</label>
+                            <input id="register-name" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-username">Tên tài khoản</label>
+                            <input id="register-username" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Mật khẩu</label>
+                            <input id="register-password" type="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">Xác nhận Mật khẩu</label>
+                            <input id="register-confirm-password" type="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width">Đăng ký miễn phí</button>
+                        <p class="form-switch">Đã có tài khoản? <a href="#" data-auth-action="show-login">Đăng nhập</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự án - HaiBanhU</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/projects.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="light-mode">
+    <div id="toast-container"></div>
+    <header>
+        <div class="container">
+            <a href="/page/home.html" class="logo nav-link" data-page="home"><img src="../images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
+            <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
+            <nav>
+                <a href="/page/home.html" class="nav-item nav-link" data-page="home"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                <div id="features-menu" class="dropdown">
+                    <button id="features-menu-btn" class="nav-menu-toggle"><i class="fas fa-th-large"></i><span>Chức năng</span><i class="fas fa-chevron-down"></i></button>
+                    <div id="features-menu-dropdown" class="dropdown-menu hidden">
+                         <a href="/page/projects.html" class="nav-link" data-page="projects"><i class="fas fa-table-columns"></i> Dự án</a>
+                         <a href="/page/automation.html" class="nav-link" data-page="automation"><i class="fas fa-robot"></i> Tự động hóa</a>
+                         <a href="/page/image-studio.html" class="nav-link" data-page="image-studio"><i class="fas fa-palette"></i> Xưởng Ảnh AI</a>
+                    </div>
+                </div>
+                <div id="nav-actions">
+                    <button id="notification-btn" class="nav-icon-btn"><i class="fas fa-bell"></i><span id="notification-count" class="hidden">0</span></button>
+                    <div id="notification-dropdown" class="hidden"></div>
+                    <button id="dark-mode-toggle" class="dark-mode-btn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                </div>
+                <div id="user-menu" class="dropdown hidden">
+                    <button id="user-menu-btn" class="user-menu-toggle"><img id="user-avatar-nav" src="../images/default-avatar.png" alt="User Avatar" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><span id="username-display"></span><i class="fas fa-chevron-down"></i></button>
+                    <div id="user-menu-dropdown" class="dropdown-menu hidden">
+                        <div class="dropdown-header"><span id="dropdown-username"></span><span id="dropdown-email"></span></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="/page/profile.html" class="nav-link" data-page="profile"><i class="fas fa-user-circle"></i> Hồ sơ của bạn</a>
+                        <a href="/page/settings.html" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="dashboard" class="container"><div class="page-header-banner"><div class="banner-content"><h2><i class="fa-solid fa-table-columns"></i> Bảng điều khiển Dự án</h2><p>Nơi tập trung tất cả các dự án của bạn. Nhấp vào một dự án để xem chi tiết hoặc tạo dự án mới.</p></div><button id="add-project-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Tạo dự án mới</button></div><div id="project-list" class="grid-container"></div></section>
+        <section id="project-detail" class="container hidden"><div class="project-detail-header"><button id="back-to-dashboard-btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</button><div class="project-title-container"><h2 id="project-title"></h2><div id="project-member-avatars"></div></div><div class="project-header-actions"><button id="invite-to-project-btn" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Mời</button><button id="project-settings-btn" class="btn btn-secondary"><i class="fas fa-cog"></i></button></div></div><div class="project-nav"><button class="project-nav-btn active" data-project-tab="tasks"><i class="fa-solid fa-list-check"></i> Bảng công việc</button><button class="project-nav-btn" data-project-tab="docs"><i class="fa-solid fa-file-lines"></i> Tài liệu</button><button class="project-nav-btn" data-project-tab="members"><i class="fa-solid fa-users"></i> Thành viên</button></div><div class="project-tab-content active" id="project-tab-tasks"><div id="task-columns" class="task-board"></div></div><div class="project-tab-content" id="project-tab-docs"><div class="docs-header"><h3>Danh sách tài liệu</h3><button id="upload-file-btn" class="btn btn-primary"><i class="fas fa-upload"></i> Tải lên tài liệu</button></div><div id="document-list" class="grid-container"></div></div><div class="project-tab-content" id="project-tab-members"><h3>Danh sách thành viên</h3><div id="member-list-container"></div></div></section>
+    </main>
+    
+    <button id="toggle-sidebar-btn" class="nav-icon-btn hidden"><i class="fas fa-chevron-left"></i></button>
+    <aside id="right-sidebar" class="hidden">
+        <div class="friends-panel">
+            <div class="sidebar-panel-header"><h4><i class="fas fa-user-friends"></i> Bạn bè</h4></div>
+            <div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Người bạn AI</div><div class="friend-status online"></div></div></div>
+        </div>
+    </aside>
+
+    <div id="modal-backdrop" class="hidden"></div>
+    <div id="add-project-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Tạo dự án mới</h3><form id="add-project-form"><div class="form-group"><label for="project-name">Tên dự án</label><input id="project-name" type="text" placeholder="Ví dụ: Chiến dịch Marketing Q4" required></div><div class="form-group"><label for="project-description">Mô tả</label><textarea id="project-description" rows="3" placeholder="Mô tả ngắn về dự án..."></textarea></div><div class="form-group"><label for="project-deadline">Hạn chót (Deadline)</label><input id="project-deadline" type="date"></div><button type="submit" class="btn btn-primary full-width">Tạo dự án</button></form></div>
+    <div id="edit-project-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Cài đặt dự án</h3><form id="edit-project-form"><input type="hidden" id="edit-project-id-input"><div class="form-group"><label for="edit-project-name">Tên dự án</label><input id="edit-project-name" type="text" required></div><div class="form-group"><label for="edit-project-description">Mô tả</label><textarea id="edit-project-description" rows="3"></textarea></div><div class="form-group"><label for="edit-project-deadline">Hạn chót (Deadline)</label><input id="edit-project-deadline" type="date"></div><div class="form-actions"><button type="submit" class="btn btn-primary full-width">Lưu thay đổi</button><button type="button" id="delete-project-btn" class="btn btn-danger full-width">Xóa dự án</button></div></form></div>
+    <div id="upload-file-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Tải tệp lên dự án</h3><form id="upload-file-form"><div class="form-group"><label for="file-upload-title">Tên hiển thị của tệp</label><input id="file-upload-title" type="text" placeholder="Ví dụ: Báo cáo tuần 1" required></div><div class="form-group"><label>Chọn tệp từ máy tính</label><input type="file" id="file-upload-input" class="file-input" required><label for="file-upload-input" class="btn btn-secondary"><i class="fa-solid fa-upload"></i> Chọn Tệp</label><span id="file-upload-name" style="margin-left: 10px; color: var(--text-light-color); font-style: italic;">Chưa chọn tệp nào</span></div><button type="submit" class="btn btn-primary full-width">Tải lên</button></form></div>
+    
+    <div id="add-task-modal" class="modal hidden">
+        <button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+        <h3 id="add-task-modal-title">Thêm công việc mới</h3>
+        <form id="add-task-form">
+            <div class="form-group">
+                <label for="add-task-title-input">Tiêu đề</label>
+                <input id="add-task-title-input" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="add-task-description-input">Mô tả</label>
+                <textarea id="add-task-description-input" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="add-task-duedate-input">Ngày hết hạn</label>
+                <input id="add-task-duedate-input" type="date">
+            </div>
+            <div class="form-group assignee-container">
+                <label>Gán cho</label>
+                <div class="selected-assignees" id="add-task-selected-assignees">
+                    <span class="assignee-placeholder">Chọn thành viên...</span>
+                </div>
+                <div class="assignee-popover" id="add-task-assignee-popover">
+                    <div class="assignee-popover-list"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary full-width">Thêm công việc</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="task-detail-modal" class="modal hidden">
+        <button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+        <h3>Chi tiết công việc</h3>
+        <form id="task-detail-form">
+            <input type="hidden" id="task-id-input">
+            <div class="form-group">
+                <label for="task-title-input">Tiêu đề</label>
+                <input id="task-title-input" type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="task-description-input">Mô tả</label>
+                <textarea id="task-description-input" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="task-duedate-input">Ngày hết hạn</label>
+                <input id="task-duedate-input" type="date">
+            </div>
+            <div class="form-group assignee-container">
+                <label>Gán cho</label>
+                <div class="selected-assignees" id="task-detail-selected-assignees">
+                    <span class="assignee-placeholder">Chọn thành viên...</span>
+                </div>
+                <div class="assignee-popover" id="task-detail-assignee-popover">
+                     <div class="assignee-popover-list"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" id="complete-task-btn" class="btn btn-success full-width"><i class="fas fa-check-circle"></i> Hoàn thành công việc</button>
+                <button type="submit" class="btn btn-primary full-width">Lưu thay đổi</button>
+                <button type="button" id="delete-task-btn" class="btn btn-danger full-width">Xóa công việc</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="complete-task-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Xác nhận hoàn thành</h3><p class="form-help-text">Vui lòng tải lên tệp kết quả (nếu có) để hoàn tất công việc.</p><form id="complete-task-form"><input type="hidden" id="complete-task-id-input"><div class="form-group"><input type="file" id="complete-task-file-input" class="file-input"><label for="complete-task-file-input" class="btn btn-secondary"><i class="fa-solid fa-upload"></i> Chọn Tệp</label><span id="complete-task-file-name">Chưa chọn tệp nào</span></div><div class="form-actions"><button type="submit" class="btn btn-success full-width">Xác nhận hoàn thành</button></div></form></div>
+    <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
+    <div id="invite-to-project-modal" class="modal hidden"><button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button><h3>Mời thành viên vào dự án</h3><div class="form-group"><input type="search" id="invite-search-input" placeholder="Tìm kiếm bạn bè..."></div><div id="invite-user-list-container"><div id="invite-user-list"></div></div><div class="divider" style="text-align: center; margin: 15px 0; color: var(--text-light-color);"><span>HOẶC</span></div><div class="form-group"><label>Gửi link mời cho họ</label><div class="invite-link-wrapper"><input type="text" id="project-invite-link-input" readonly value="Đang tạo link..."><button id="copy-invite-link-btn" class="btn btn-secondary">Sao chép</button></div></div></div>
+
+    <div id="user-chat-container"></div>
+    <div id="chat-box-template" class="chat-box hidden">
+        <div class="chat-box-header">
+            <div class="chat-box-recipient">
+                <div class="chat-box-header-avatar"></div>
+                <span class="chat-box-title"></span>
+            </div>
+            <div class="chat-box-controls">
+                <button class="chat-header-btn minimize-btn" title="Thu nhỏ"><i class="fas fa-minus"></i></button>
+                <button class="chat-header-btn chat-close-btn" title="Đóng"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="chat-box-content">
+            <div class="chat-box-messages"></div>
+            <div class="chat-box-input-area">
+                <div class="chat-input-prefix-actions">
+                    <button class="chat-action-btn" data-chat-action="attach-file" title="Đính kèm tệp"><i class="fas fa-paperclip"></i></button>
+                    <button class="chat-action-btn" data-chat-action="send-image" title="Gửi ảnh"><i class="fas fa-image"></i></button>
+                </div>
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea>
+                </div>
+                <button class="chat-action-btn send-btn" title="Gửi"><i class="fas fa-paper-plane"></i></button>
+                <input type="file" class="hidden" data-chat-action-input="file">
+                <input type="file" class="hidden" data-chat-action-input="image" accept="image/*">
+            </div>
+        </div>
+    </div>
+    <div id="minimized-chats-container"></div>
+    
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/projects.js"></script>
+</body>
+</html>

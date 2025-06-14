@@ -1,0 +1,141 @@
+/* --- START OF FILE common.css --- */
+
+:root {
+    /* 🎯 1. Màu chính (Primary colors) – Xanh dương trung tính */
+    --primary-color: #3B82F6;
+    --primary-hover-color: #2563EB;
+
+    /* 🌿 2. Màu phụ (Secondary colors) – Xanh lá mạ */
+    --secondary-color: #10B981;
+    --secondary-light-color: #34D399;
+
+    /* 💥 3. Màu nhấn (Accent colors) – Tím pastel & Cam san hô */
+    --accent-color: #A78BFA;
+    --accent-alt-color: #F97316;
+    
+    /* Các màu tiện ích được ánh xạ lại */
+    --gradient-start: #60A5FA;
+    --gradient-end: #3B82F6;
+    --success-color: #10B981; /* Giống màu phụ */
+    --error-color: #EF4444;
+    --info-color: #3B82F6;    /* Giống màu chính */
+    --loop-color: #A78BFA;    /* Giống màu nhấn */
+
+    /* 📄 4. Màu nền (Background & Surface) */
+    --background-color: #F9FAFB;
+    --card-background-color: #FFFFFF;
+
+    /* 🔠 5. Màu chữ (Text) */
+    --text-color: #111827;
+    --text-light-color: #6B7280;
+    
+    /* Các thuộc tính khác */
+    --border-color: #E5E7EB;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --border-radius: 12px;
+    --font-family: 'Manrope', sans-serif;
+}
+
+body.dark-mode {
+    --primary-color: #60A5FA;
+    --primary-hover-color: #3B82F6;
+    --secondary-color: #34D399;
+    --secondary-light-color: #6EE7B7;
+    --gradient-start: #60A5FA;
+    --gradient-end: #2563EB;
+    
+    /* Nền và Chữ cho Dark Mode */
+    --text-color: #E5E7EB;
+    --text-light-color: #9CA3AF;
+    --background-color: #111827;
+    --card-background-color: #1F2937;
+    --border-color: #374151;
+}
+
+/* ==========================================================================
+   ANIMATIONS & KEYFRAMES
+   ========================================================================== */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { transform: translateX(110%); } to { transform: translateX(0); } }
+@keyframes slideOutRight { to { transform: translateX(110%); } }
+@keyframes modalFadeIn { from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes authContainerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes authBoxFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes node-running-glow { 0% { box-shadow: 0 0 5px var(--info-color), 0 0 10px var(--info-color); } 50% { box-shadow: 0 0 15px var(--info-color), 0 0 25px var(--info-color); } 100% { box-shadow: 0 0 5px var(--info-color), 0 0 10px var(--info-color); } }
+
+/* ==========================================================================
+   GLOBAL & RESET STYLES
+   ========================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-family); line-height: 1.6; background-color: var(--background-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; }
+body.auth-open { overflow: hidden; }
+
+/* ==========================================================================
+   UTILITY & LAYOUT
+   ========================================================================== */
+.container { max-width: 1440px; margin: auto; padding: 0 20px; position: relative; z-index: 2; }
+.hidden { display: none !important; }
+ul { list-style: none; }
+a { text-decoration: none; color: var(--primary-color); font-weight: 600; }
+.gradient-text { background: linear-gradient(90deg, var(--gradient-end), var(--gradient-start)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* ==========================================================================
+   SHARED COMPONENTS
+   ========================================================================== */
+
+/* --- BUTTONS --- */
+.btn { display: inline-block; padding: 12px 28px; border: 1px solid transparent; border-radius: var(--border-radius); cursor: pointer; font-size: 16px; font-weight: 600; font-family: var(--font-family); transition: all 0.2s ease-out; }
+.btn-primary { background: linear-gradient(90deg, var(--gradient-end), var(--gradient-start)); color: #FFFFFF; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+body.dark-mode .btn-primary { color: #FFFFFF; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); background: linear-gradient(90deg, var(--primary-hover-color), var(--primary-color));}
+.btn-primary:disabled { background-image: none; background-color: var(--border-color); color: var(--text-light-color); cursor: not-allowed; box-shadow: none; transform: none; }
+.btn-secondary { background-color: transparent; color: var(--text-color); border-color: var(--border-color); }
+.btn-secondary:hover { background-color: var(--card-background-color); border-color: var(--primary-hover-color); color: var(--primary-hover-color); }
+.btn-danger { background-color: var(--error-color); color: white; }
+.btn-danger:hover { background-color: #D93434; transform: translateY(-2px); }
+.btn-success { background-color: var(--success-color); color: white; }
+.btn-success:hover { background-color: #0E9F6E; transform: translateY(-2px); }
+.btn-large { padding: 15px 30px; font-size: 18px; }
+.full-width { width: 100%; }
+
+/* --- FORMS --- */
+label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-color); }
+input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="time"], input[type="search"], select, textarea { display: block; width: 100%; padding: 12px 15px; font-size: 16px; font-family: var(--font-family); line-height: 1.5; color: var(--text-color); background-color: var(--card-background-color); border: 1px solid var(--border-color); border-radius: 8px; transition: border-color 0.2s, box-shadow 0.2s; }
+body.dark-mode input[type="text"], body.dark-mode input[type="email"], body.dark-mode input[type="password"], body.dark-mode input[type="date"], body.dark-mode input[type="time"], body.dark-mode input[type="search"], body.dark-mode select, body.dark-mode textarea { background-color: #2b3544; border-color: #4f5a69; }
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="search"]:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+textarea { resize: vertical; min-height: 90px; }
+input:disabled, select:disabled, textarea:disabled { background-color: var(--border-color); color: var(--text-light-color); cursor: not-allowed; opacity: 0.8; }
+.form-group { margin-bottom: 20px; }
+.form-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.form-help-text { font-size: 14px; color: var(--text-light-color); margin-bottom: 20px; margin-top: -10px; }
+.form-switch { text-align: center; margin-top: 25px; font-size: 14px; color: var(--text-light-color); }
+.form-switch a { font-weight: 700; }
+.file-input { display: none; }
+
+/* --- MODALS --- */
+#modal-backdrop { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1500; background-color: rgba(17, 24, 39, 0.6); backdrop-filter: blur(8px); }
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1600; background: var(--background-color); border: 1px solid var(--border-color); animation: modalFadeIn 0.3s ease-out; border-radius: var(--border-radius); padding: 30px; box-shadow: var(--shadow-hover); max-width: 500px; width: 90%; }
+.modal-lg { max-width: 800px; }
+.modal h3 { text-align: center; margin-bottom: 25px; font-size: 1.5rem; }
+.close-modal-btn { position: absolute; top: 15px; right: 15px; font-size: 20px; background: none; border: none; color: var(--text-light-color); cursor: pointer; z-index: 10; line-height: 1; padding: 5px; }
+.close-modal-btn:hover { color: var(--text-color); }
+
+/* --- CONFIRMATION MODAL --- */
+#confirmation-modal .confirmation-content { text-align: center; }
+#confirmation-modal #confirmation-message { color: var(--text-light-color); margin-top: -15px; margin-bottom: 25px; font-size: 16px; }
+#confirmation-modal .confirmation-actions { display: flex; justify-content: center; gap: 15px; }
+#confirmation-modal .confirmation-actions .btn { flex-grow: 1; }
+
+/* --- TOAST NOTIFICATIONS --- */
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+.toast { min-width: 320px; background-color: var(--card-background-color); color: var(--text-color); padding: 15px 20px; border-radius: var(--border-radius); box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 15px; border-left: 5px solid; animation: slideInRight 0.5s ease-out; }
+.toast.exiting { animation: slideOutRight 0.5s ease-in forwards; }
+.toast.success { border-left-color: var(--success-color); }
+.toast.error { border-left-color: var(--error-color); }
+.toast.info { border-left-color: var(--info-color); }
+.toast i { font-size: 20px; }
+.toast.success i { color: var(--success-color); }
+.toast.error i { color: var(--error-color); }
+.toast.info i { color: var(--info-color); }
