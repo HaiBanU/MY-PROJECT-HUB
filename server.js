@@ -1,4 +1,4 @@
-// --- START OF FILE server.js (MODIFIED FOR RENDER) ---
+// --- START OF FILE server.js (MODIFIED TO FIX AUTOMATION CRASH) ---
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -20,17 +20,17 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
-// << THAY ĐỔI Ở ĐÂY >>: Lấy URL frontend từ biến môi trường để cấu hình linh hoạt
-const frontendURL = process.env.FRONTEND_URL || "https://haibanhu.onrender.com";
+// Lấy URL frontend từ biến môi trường
+const frontendURL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 const io = new Server(server, {
     cors: {
-        origin: frontendURL, // << THAY ĐỔI Ở ĐÂY >>
+        origin: frontendURL,
         methods: ["GET", "POST"]
     }
 });
 
-// << THAY ĐỔI Ở ĐÂY >>: Cấu hình CORS chi tiết hơn
+// Cấu hình CORS chi tiết hơn
 app.use(cors({
     origin: frontendURL
 }));
@@ -169,8 +169,14 @@ async function executeWorkflow(user, workflow) {
                     nodeResults[nodeId] = { generatedText: aiResult };
                     break;
                 case 'web-scraper':
-                    const url = node.config.url;
+                    let url = node.config.url; // Dùng let thay vì const
                     if (!url) { throw new Error(`Trợ lý Nghiên cứu Web (${nodeId}) chưa được cấu hình URL.`); }
+                    
+                    // Tự động thêm https:// nếu thiếu
+                    if (!/^https?:\/\//i.test(url)) {
+                        url = 'https://' + url;
+                    }
+
                     console.log(`[RESEARCHER] Fetching URL: ${url}`);
                     const { data: html } = await axios.get(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' } });
                     const $ = cheerio.load(html);
