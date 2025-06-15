@@ -1,6 +1,10 @@
-// --- START OF FILE js/main.js (CẬP NHẬT) ---
+// --- START OF FILE js/main.js (MODIFIED FOR RENDER) ---
 
-const socket = io("https://haibanhu.onrender.com");
+// << THAY ĐỔI Ở ĐÂY >>: Tự động xác định URL của API và Socket server
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE_URL = isLocal ? 'https://haibanhu.onrender.com' : window.location.origin;
+
+const socket = io(API_BASE_URL); // << THAY ĐỔI Ở ĐÂY >>
 
 // --- GLOBAL STATE & CONFIG ---
 let currentUser = null;
@@ -40,7 +44,11 @@ async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('haiBanhU_Token');
     const headers = { 'Content-Type': 'application/json', ...options.headers };
     if (token) { headers['Authorization'] = `Bearer ${token}`; }
-    const response = await fetch(url, { ...options, headers });
+    
+    // << THAY ĐỔI Ở ĐÂY >>: Luôn sử dụng API_BASE_URL cho mọi request
+    const fullUrl = `${API_BASE_URL}${url}`;
+    const response = await fetch(fullUrl, { ...options, headers });
+
     if (response.status === 401 || response.status === 403) { handleLogout(); throw new Error("Phiên đăng nhập không hợp lệ hoặc đã hết hạn."); }
     if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`); }
     const contentType = response.headers.get("content-type");

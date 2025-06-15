@@ -1,4 +1,4 @@
-// --- START OF FILE server.js (CẬP NHẬT HOÀN CHỈNH - ÉP BUỘC TIẾNG VIỆT) ---
+// --- START OF FILE server.js (MODIFIED FOR RENDER) ---
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -19,14 +19,22 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
+
+// << THAY ĐỔI Ở ĐÂY >>: Lấy URL frontend từ biến môi trường để cấu hình linh hoạt
+const frontendURL = process.env.FRONTEND_URL || "https://haibanhu.onrender.com";
+
 const io = new Server(server, {
     cors: {
-        origin: "*", 
+        origin: frontendURL, // << THAY ĐỔI Ở ĐÂY >>
         methods: ["GET", "POST"]
     }
 });
 
-app.use(cors());
+// << THAY ĐỔI Ở ĐÂY >>: Cấu hình CORS chi tiết hơn
+app.use(cors({
+    origin: frontendURL
+}));
+
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname)));
