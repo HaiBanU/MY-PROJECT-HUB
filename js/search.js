@@ -1,4 +1,43 @@
-// --- START OF FILE js/search.js ---
+// --- START OF FILE js/search.js (MODIFIED TO FIX FRIEND REQUEST) ---
+
+// << THÊM HÀM NÀY VÀO ĐẦU FILE >>
+async function sendFriendRequest(targetId) {
+    if (!targetId) return;
+    const actionButton = document.querySelector(`[data-action="add-friend"][data-target-id="${targetId}"]`);
+    if (actionButton) {
+        actionButton.disabled = true;
+        actionButton.textContent = 'Đang gửi...';
+    }
+
+    try {
+        const result = await fetchWithAuth(`/api/friends/request/${targetId}`, {
+            method: 'POST'
+        });
+        showToast(result.message, 'success');
+        
+        // Cập nhật lại giao diện nút bấm ngay lập tức
+        if (actionButton) {
+            actionButton.textContent = 'Đã gửi yêu cầu';
+            actionButton.dataset.action = ''; // Vô hiệu hóa hành động tiếp theo
+        }
+
+        // Cập nhật lại dữ liệu người dùng được gửi yêu cầu trong state `allUsers`
+        const targetUserIndex = allUsers.findIndex(u => String(u.id) === String(targetId));
+        if (targetUserIndex > -1) {
+            if (!allUsers[targetUserIndex].friendRequests) {
+                allUsers[targetUserIndex].friendRequests = [];
+            }
+            allUsers[targetUserIndex].friendRequests.push({ from: currentUser.id, status: 'pending' });
+        }
+
+    } catch (error) {
+        showToast(error.message, 'error');
+        if (actionButton) {
+            actionButton.disabled = false;
+            actionButton.innerHTML = '<i class="fas fa-user-plus"></i> Thêm bạn bè';
+        }
+    }
+}
 
 function renderSearchResults(results) {
     const container = document.getElementById('search-results-container');
