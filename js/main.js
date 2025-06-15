@@ -1,11 +1,13 @@
-// --- START OF FILE js/main.js --- (PHIÊN BẢN SỬA LỖI TÌM KIẾM VÀ HIỂN THỊ BẠN BÈ/THÔNG BÁO)
+// --- START OF FILE js/main.js (CẬP NHẬT) ---
+
+const socket = io("https://haibanhu.onrender.com");
 
 // --- GLOBAL STATE & CONFIG ---
-let currentUser = null; 
-let allUsers = []; 
+let currentUser = null;
+let allUsers = [];
 let currentProjectId = null;
-let currentWorkflowId = null; 
-let currentColumnStatus = null; 
+let currentWorkflowId = null;
+let currentColumnStatus = null;
 let lastFocusedInput = null;
 
 // --- ELEMENT SELECTORS (SHARED) ---
@@ -13,15 +15,15 @@ const body = document.body;
 const header = document.querySelector('header');
 const userMenu = document.getElementById('user-menu');
 
-const modals = { 
-    backdrop: document.getElementById('modal-backdrop'), 
-    addProject: document.getElementById('add-project-modal'), 
-    editProject: document.getElementById('edit-project-modal'), 
-    addTask: document.getElementById('add-task-modal'), 
-    taskDetail: document.getElementById('task-detail-modal'), 
-    completeTask: document.getElementById('complete-task-modal'), 
-    confirmation: document.getElementById('confirmation-modal'), 
-    actionConfig: document.getElementById('action-config-modal'), 
+const modals = {
+    backdrop: document.getElementById('modal-backdrop'),
+    addProject: document.getElementById('add-project-modal'),
+    editProject: document.getElementById('edit-project-modal'),
+    addTask: document.getElementById('add-task-modal'),
+    taskDetail: document.getElementById('task-detail-modal'),
+    completeTask: document.getElementById('complete-task-modal'),
+    confirmation: document.getElementById('confirmation-modal'),
+    actionConfig: document.getElementById('action-config-modal'),
     addWorkflow: document.getElementById('add-workflow-modal'),
     appPassword: document.getElementById('app-password-modal'),
     uploadFile: document.getElementById('upload-file-modal'),
@@ -38,21 +40,11 @@ async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('haiBanhU_Token');
     const headers = { 'Content-Type': 'application/json', ...options.headers };
     if (token) { headers['Authorization'] = `Bearer ${token}`; }
-
-    // =========================================================================
-    // SỬA LỖI Ở ĐÂY:
-    // Xóa địa chỉ server cứng "https://my-project-hub.onrender.com"
-    // Khi để trống, trình duyệt sẽ tự động gửi request đến domain hiện tại.
-    // Nếu đang chạy ở http://localhost:3000, request sẽ đi đến http://localhost:3000/api/...
-    // Nếu đang chạy ở https://my-project-hub.onrender.com, request sẽ đi đến https://my-project-hub.onrender.com/api/...
-    // Điều này giúp code chạy đúng ở cả môi trường local và production.
-    // =========================================================================
     const response = await fetch(url, { ...options, headers });
-
     if (response.status === 401 || response.status === 403) { handleLogout(); throw new Error("Phiên đăng nhập không hợp lệ hoặc đã hết hạn."); }
     if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || `Lỗi HTTP: ${response.status}`); }
     const contentType = response.headers.get("content-type");
-    if (contentType && contentType.indexOf("application/json") !== -1) { return response.json(); } 
+    if (contentType && contentType.indexOf("application/json") !== -1) { return response.json(); }
     return null;
 }
 
@@ -133,7 +125,6 @@ async function handleFriendRequestAction(senderId, action) {
             } 
         } 
         
-        // Render lại các thành phần UI bị ảnh hưởng
         if(typeof renderNotifications === 'function') renderNotifications(); 
         if(typeof renderFriendList === 'function') renderFriendList(); 
         
@@ -154,7 +145,6 @@ async function handleProjectInviteAction(projectId, action) {
         currentUser = result.user; 
         saveCurrentUserToSession(currentUser); 
         
-        // Render lại các thành phần UI bị ảnh hưởng
         if(typeof renderNotifications === 'function') renderNotifications(); 
         if (window.location.pathname.includes('projects.html') && typeof renderProjects === 'function') { 
             renderProjects(); 
@@ -172,7 +162,6 @@ const handleGlobalSearch = (e) => {
     if (e.key === 'Enter') {
         const query = e.target.value.trim();
         if (!query) return;
-        // Chuyển hướng đến trang tìm kiếm với query
         window.location.href = `/page/search.html?q=${encodeURIComponent(query)}`;
     }
 };
@@ -194,6 +183,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateInitialUI() {
         if (!currentUser) return;
+        
+        socket.emit('joinRoom', currentUser.id);
+
         const rightSidebar = document.getElementById('right-sidebar');
         const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
         if (header) header.style.display = '';
@@ -247,8 +239,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function setupRealtimeListeners() {
+        socket.on('new_notification', (data) => {
+            showToast(data.message, 'info');
+            fetchWithAuth('/api/users').then(users => {
+                allUsers = users;
+                currentUser = allUsers.find(u => u.id === currentUser.id);
+                saveCurrentUserToSession(currentUser);
+                if (typeof renderNotifications === 'function') {
+                    renderNotifications();
+                }
+            });
+        });
+
+        socket.on('friend_request_accepted', (data) => {
+            showToast(data.message, 'success');
+            fetchWithAuth('/api/users').then(users => {
+                allUsers = users;
+                currentUser = allUsers.find(u => u.id === currentUser.id);
+                saveCurrentUserToSession(currentUser);
+                if (typeof renderFriendList === 'function') {
+                    renderFriendList();
+                }
+            });
+        });
+
+        socket.on('project_updated', (data) => {
+            if (!currentUser) return;
+    
+            showToast(data.message, 'info');
+    
+            const projectIndex = currentUser.projects.findIndex(p => p.id === data.projectId);
+            if (projectIndex > -1) {
+                currentUser.projects[projectIndex] = data.updatedProject;
+            }
+            saveCurrentUserToSession(currentUser);
+    
+            const projectDetailView = document.getElementById('project-detail');
+            if (projectDetailView && !projectDetailView.classList.contains('hidden') && currentProjectId === data.projectId) {
+                showProjectDetail(data.projectId);
+            }
+            else if (window.location.pathname.includes('projects.html') && typeof renderProjects === 'function') {
+                renderProjects();
+            }
+    
+            if (typeof renderMyTasks === 'function') {
+                renderMyTasks();
+            }
+        });
+    }
+
     function setupGlobalListeners() {
-        // Thêm trình lắng nghe sự kiện cho thanh tìm kiếm ở đây
         const searchBar = document.getElementById('main-search-bar');
         if (searchBar) {
             searchBar.addEventListener('keypress', handleGlobalSearch);
@@ -326,4 +367,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeApp();
     setupGlobalListeners();
+    setupRealtimeListeners();
 });

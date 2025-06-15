@@ -12,11 +12,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="light-mode">
     <div id="toast-container"></div>
     <header>
+        <!-- Header của bạn giữ nguyên -->
         <div class="container">
             <a href="/page/home.html" class="logo nav-link" data-page="home"><img src="../images/logo-final.png" alt="HaiBanhU Logo"><span>HaiBanhU</span></a>
             <div id="search-container"><i class="fas fa-search"></i><input type="search" id="main-search-bar" placeholder="Tìm kiếm người dùng, kỹ năng..."></div>
@@ -52,18 +52,71 @@
 
     <main>
         <section id="profile-view" class="container">
-            <div class="page-header-banner"><div class="banner-content"><h2><i class="fa-solid fa-user-pen"></i> Chỉnh sửa Hồ sơ</h2><p>Quản lý thông tin cá nhân của bạn để mọi người có thể tìm thấy và kết nối.</p></div></div>
-            <div class="profile-grid-single">
-                <div class="profile-card">
-                    <h3>Thông tin cá nhân</h3>
+            <div class="page-header-banner">
+                <div class="banner-content">
+                    <h2><i class="fa-solid fa-address-card"></i> Hồ sơ của bạn</h2>
+                    <p>Đây là nơi mọi người nhìn thấy bạn. Hãy tạo một hồ sơ thật ấn tượng!</p>
+                </div>
+            </div>
+
+            <div class="profile-layout">
+                <!-- Cột bên trái: Avatar và thông tin tóm tắt -->
+                <aside class="profile-side">
+                    <div class="profile-card profile-side-card">
+                        <div class="profile-avatar-section">
+                            <input type="file" id="avatar-upload-input" class="file-input" accept="image/*">
+                            <label for="avatar-upload-input" class="profile-avatar-wrapper">
+                                <img id="profile-avatar-img" src="../images/default-avatar.png" alt="Ảnh đại diện" onerror="this.onerror=null; this.src='../images/default-avatar.png';">
+                                <div class="profile-avatar-overlay"><i class="fas fa-camera"></i><span>Thay đổi</span></div>
+                            </label>
+                        </div>
+                        <h2 id="profile-sidebar-name">Tên của bạn</h2>
+                        <p id="profile-sidebar-title">Chức danh của bạn</p>
+                        <a href="/page/settings.html" class="btn btn-secondary full-width">
+                            <i class="fas fa-cog"></i> Cài đặt tài khoản
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Cột bên phải: Form chỉnh sửa và các thông tin khác -->
+                <div class="profile-main">
                     <form id="profile-form">
-                        <div class="profile-avatar-section"><input type="file" id="avatar-upload-input" class="file-input" accept="image/*"><label for="avatar-upload-input" class="profile-avatar-wrapper"><img id="profile-avatar-img" src="../images/default-avatar.png" alt="Ảnh đại diện" onerror="this.onerror=null; this.src='../images/default-avatar.png';"><div class="profile-avatar-overlay"><i class="fas fa-camera"></i><span>Thay đổi</span></div></label></div>
-                        <div class="form-group"><label for="profile-name">Tên hiển thị</label><input type="text" id="profile-name" required></div>
-                        <div class="form-group"><label for="profile-email">Email</label><input type="email" id="profile-email" disabled></div>
-                        <div class="form-group"><label for="profile-bio">Giới thiệu ngắn (Bio)</label><textarea id="profile-bio" rows="4" placeholder="Ví dụ: Lập trình viên Full-stack..."></textarea></div>
-                        <div class="form-group"><label for="profile-skills">Kỹ năng (phân cách bởi dấu phẩy)</label><input type="text" id="profile-skills" placeholder="Ví dụ: JavaScript, React, Node.js"></div>
-                        <div class="form-actions"><button type="submit" class="btn btn-primary full-width">Lưu thông tin</button></div>
+                        <div class="profile-card">
+                            <h3>Thông tin chung</h3>
+                            <div class="profile-main-content">
+                                <div class="form-group">
+                                    <label for="profile-name">Tên hiển thị</label>
+                                    <input type="text" id="profile-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-title">Chức danh/Nghề nghiệp</label>
+                                    <input type="text" id="profile-title" placeholder="Ví dụ: Sinh viên, Lập trình viên...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-email">Email</label>
+                                    <input type="email" id="profile-email" disabled>
+                                </div>
+                                <div class="form-group" style="align-items: flex-start;">
+                                    <label for="profile-bio">Giới thiệu ngắn (Bio)</label>
+                                    <textarea id="profile-bio" rows="4" placeholder="Một vài dòng giới thiệu về bản thân..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-skills">Kỹ năng</label>
+                                    <input type="text" id="profile-skills" placeholder="Phân cách bởi dấu phẩy, ví dụ: JavaScript, React...">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
+
+                    <div class="profile-card" style="margin-top: 30px;">
+                        <h3>Dự án đã tham gia</h3>
+                        <div id="profile-projects-list" class="profile-projects-list">
+                            <!-- Danh sách dự án sẽ được render bằng JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -76,40 +129,30 @@
             <div id="friends-list-container"><div id="ai-assistant-chat-item" class="friend-item" data-action="open-chat" data-friend-id="ai"><div class="friend-avatar ai-avatar"><i class="fas fa-robot"></i></div><div class="friend-name">Người bạn AI</div><div class="friend-status online"></div></div></div>
         </div>
     </aside>
-
+    
     <div id="modal-backdrop" class="hidden"></div>
-    <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
+
+    <!-- SỬA LỖI: Thêm cấu trúc HTML đầy đủ cho modal xác nhận -->
+    <div id="confirmation-modal" class="modal hidden">
+        <div class="confirmation-content">
+            <h3 id="confirmation-title">Xác nhận hành động</h3>
+            <p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p>
+        </div>
+        <div class="confirmation-actions">
+            <button id="confirm-btn" class="btn btn-danger">Xác nhận</button>
+            <button id="cancel-btn" class="btn btn-secondary">Hủy</button>
+        </div>
+    </div>
     
     <div id="user-chat-container"></div>
     <div id="chat-box-template" class="chat-box hidden">
-        <div class="chat-box-header">
-            <div class="chat-box-recipient">
-                <div class="chat-box-header-avatar"></div>
-                <span class="chat-box-title"></span>
-            </div>
-            <div class="chat-box-controls">
-                <button class="chat-header-btn minimize-btn" title="Thu nhỏ"><i class="fas fa-minus"></i></button>
-                <button class="chat-header-btn chat-close-btn" title="Đóng"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
-        <div class="chat-box-content">
-            <div class="chat-box-messages"></div>
-            <div class="chat-box-input-area">
-                <div class="chat-input-prefix-actions">
-                    <button class="chat-action-btn" data-chat-action="attach-file" title="Đính kèm tệp"><i class="fas fa-paperclip"></i></button>
-                    <button class="chat-action-btn" data-chat-action="send-image" title="Gửi ảnh"><i class="fas fa-image"></i></button>
-                </div>
-                <div class="chat-input-wrapper">
-                    <textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea>
-                </div>
-                <button class="chat-action-btn send-btn" title="Gửi"><i class="fas fa-paper-plane"></i></button>
-                <input type="file" class="hidden" data-chat-action-input="file">
-                <input type="file" class="hidden" data-chat-action-input="image" accept="image/*">
-            </div>
-        </div>
+        <!-- Cấu trúc chat box đầy đủ -->
+        <div class="chat-box-header"><div class="chat-box-recipient"><div class="chat-box-header-avatar"></div><span class="chat-box-title"></span></div><div class="chat-box-controls"><button class="chat-header-btn minimize-btn" title="Thu nhỏ"><i class="fas fa-minus"></i></button><button class="chat-header-btn chat-close-btn" title="Đóng"><i class="fas fa-times"></i></button></div></div>
+        <div class="chat-box-content"><div class="chat-box-messages"></div><div class="chat-box-input-area"><div class="chat-input-prefix-actions"><button class="chat-action-btn" data-chat-action="attach-file" title="Đính kèm tệp"><i class="fas fa-paperclip"></i></button><button class="chat-action-btn" data-chat-action="send-image" title="Gửi ảnh"><i class="fas fa-image"></i></button></div><div class="chat-input-wrapper"><textarea class="chat-input-textarea" placeholder="Aa" rows="1"></textarea></div><button class="chat-action-btn send-btn" title="Gửi"><i class="fas fa-paper-plane"></i></button><input type="file" class="hidden" data-chat-action-input="file"><input type="file" class="hidden" data-chat-action-input="image" accept="image/*"></div></div>
     </div>
     <div id="minimized-chats-container"></div>
     
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/sidebar.js"></script>
     <script src="../js/profile.js"></script>

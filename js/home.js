@@ -1,4 +1,4 @@
-// --- START OF FILE js/home.js ---
+// --- START OF FILE js/home.js (CẬP NHẬT) ---
 
 function renderMyTasks() {
     const container = document.getElementById('my-tasks-list');

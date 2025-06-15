@@ -1,4 +1,4 @@
-/* --- START OF FILE css/automation.css --- */
+/* --- START OF FILE css/automation.css (CẬP NHẬT HOÀN CHỈNH) --- */
 
 /* ==========================================================================
    AUTOMATION LIST VIEW - NEW LAYOUT
@@ -19,10 +19,10 @@
     align-items: center;
     padding: 15px 25px;
     cursor: pointer;
-    list-style: none; /* Hide default arrow */
+    list-style: none;
 }
 .automation-config-summary::-webkit-details-marker {
-    display: none; /* Hide default arrow for Safari */
+    display: none;
 }
 .automation-config-summary h3 {
     margin: 0;
@@ -94,12 +94,10 @@ body.dark-mode .node-instance.error { background-color: #492828; }
 .node-instance.dragging { opacity: 0.8; z-index: 100; cursor: grabbing; }
 .node-instance.trigger { border-left: 4px solid var(--secondary-color); }
 
-.node-instance[data-type="ai-agent"] {
-    border-left: 4px solid var(--accent-color);
-}
-.node-instance[data-type="ai-agent"] i {
-    color: var(--accent-color);
-}
+.node-instance[data-type="ai-agent"] { border-left: 4px solid var(--accent-color); }
+.node-instance[data-type="ai-agent"] i { color: var(--accent-color); }
+.node-instance[data-type="web-scraper"] { border-left: 4px solid var(--accent-alt-color); }
+.node-instance[data-type="web-scraper"] i { color: var(--accent-alt-color); }
 
 .node-instance .node-info { font-size: 12px; color: var(--text-light-color); margin-top: 5px; font-weight: 400; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .node-instance i { color: var(--primary-color); }
@@ -121,3 +119,24 @@ body.dark-mode .node-instance.error { background-color: #492828; }
 .recipients-group .file-input + .btn { margin-left: auto; }
 .attachment-group { margin-top: 15px; }
 #email-attachment-name { margin-left: 10px; color: var(--text-light-color); font-style: italic; }
+
+.instruction-list { list-style: none; counter-reset: instruction-counter; padding-left: 0; margin: 20px 0; border-top: 1px solid var(--border-color); padding-top: 20px; }
+.instruction-list li { counter-increment: instruction-counter; padding-left: 35px; position: relative; font-size: 14px; line-height: 1.6; color: var(--text-light-color); }
+.instruction-list li:not(:last-child) { margin-bottom: 20px; }
+.instruction-list li::before { content: counter(instruction-counter); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background-color: var(--primary-color); color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.instruction-list strong { color: var(--text-color); font-weight: 600; }
+.instruction-list li .btn { margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 14px; }
+
+#action-config-content textarea#config-input-url {
+    width: 100%; padding: 12px 15px; font-size: 16px; font-family: var(--font-family);
+    line-height: 1.5; color: var(--text-color); background-color: var(--card-background-color);
+    border: 1px solid var(--border-color); border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical; min-height: 50px; max-height: 200px;
+}
+body.dark-mode #action-config-content textarea#config-input-url {
+    background-color: #2b3544; border-color: #4f5a69;
+}
+#action-config-content textarea#config-input-url:focus {
+    outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}

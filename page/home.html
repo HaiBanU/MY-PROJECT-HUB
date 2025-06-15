@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/sidebar.css">
-    <!-- <<< MỚI: Thêm CSS cho trang chủ >>> -->
     <link rel="stylesheet" href="../css/home.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,11 +85,9 @@
                 </div>
             </div>
             <div class="container page-content">
-                <!-- <<< MỚI: Thêm khu vực "Công việc của tôi" >>> -->
                 <div class="my-tasks-section">
                     <h2><i class="fas fa-tasks"></i> Công việc của tôi</h2>
                     <div id="my-tasks-list">
-                        <!-- Các công việc sẽ được JS render vào đây -->
                     </div>
                 </div>
 
@@ -140,6 +137,7 @@
     <div id="confirmation-modal" class="modal hidden"><div class="confirmation-content"><h3 id="confirmation-title">Xác nhận hành động</h3><p id="confirmation-message">Bạn có chắc chắn muốn tiếp tục?</p></div><div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger">Xác nhận</button><button id="cancel-btn" class="btn btn-secondary">Hủy</button></div></div>
     
     <div id="user-chat-container"></div>
+    <div id="minimized-chats-container"></div>
     <div id="chat-box-template" class="chat-box hidden">
         <div class="chat-box-header">
             <div class="chat-box-recipient">
@@ -167,13 +165,13 @@
             </div>
         </div>
     </div>
-    <div id="minimized-chats-container"></div>
     
+    <!-- MODIFIED: Đặt Socket.IO lên trên cùng -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/sidebar.js"></script>
     <script src="../js/profile.js"></script>
     <script src="../js/search.js"></script>
-    <!-- <<< MỚI: Thêm script cho trang chủ >>> -->
     <script src="../js/home.js"></script>
 </body>
 </html>

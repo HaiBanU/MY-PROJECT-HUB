@@ -1,4 +1,4 @@
-// --- START OF FILE js/projects.js --- (PHIÊN BẢN CÓ GIAO DIỆN CHỌN THÀNH VIÊN)
+// --- START OF FILE js/projects.js (CẬP NHẬT) ---
 
 function switchProjectTab(tabName) {
     document.querySelectorAll('.project-nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -221,11 +221,9 @@ async function handleEditProjectFormSubmit(e) { e.preventDefault(); const projec
 
 // --- <<< CÁC HÀM ĐƯỢC CẬP NHẬT CHO TÍNH NĂNG GÁN THÀNH VIÊN >>> ---
 
-// Hàm chung để render popover chọn thành viên
 function renderAssigneePopover(popoverListEl, selectedAssignees = []) {
     const project = currentUser.projects.find(p => p.id === currentProjectId);
     if (!project || !popoverListEl) return;
-
     popoverListEl.innerHTML = '';
     project.members.forEach(memberId => {
         const member = findUserById(memberId);
@@ -234,7 +232,6 @@ function renderAssigneePopover(popoverListEl, selectedAssignees = []) {
             const item = document.createElement('div');
             item.className = 'member-item';
             item.dataset.memberName = member.name;
-
             item.innerHTML = `
                 <input type="checkbox" ${isChecked ? 'checked' : ''}>
                 <div class="member-avatar">
@@ -247,7 +244,6 @@ function renderAssigneePopover(popoverListEl, selectedAssignees = []) {
     });
 }
 
-// Hàm chung để cập nhật hiển thị các avatar đã được chọn
 function updateSelectedAssigneesUI(containerEl, selectedNames) {
     containerEl.innerHTML = '';
     if (selectedNames.length === 0) {
@@ -274,7 +270,6 @@ function handleAddTask(buttonElement) {
     const popoverList = document.querySelector('#add-task-assignee-popover .assignee-popover-list');
     const selectedContainer = document.getElementById('add-task-selected-assignees');
     
-    // Khởi tạo trạng thái rỗng
     updateSelectedAssigneesUI(selectedContainer, []);
     renderAssigneePopover(popoverList, []);
     
@@ -294,21 +289,38 @@ async function handleAddTaskFormSubmit(e) {
         return;
     }
 
-    // Lấy danh sách thành viên được chọn từ popover
     const selectedAssignees = [];
     document.querySelectorAll('#add-task-assignee-popover .member-item input:checked').forEach(checkbox => {
         selectedAssignees.push(checkbox.closest('.member-item').dataset.memberName);
     });
     const assignee = selectedAssignees.join(', ');
 
-    const project = currentUser.projects.find(p => p.id === currentProjectId);
-    if (!project.tasks) project.tasks = [];
-    project.tasks.push({ id: String(Date.now()), title, status: currentColumnStatus, description, dueDate: dueDate || null, assignee, completedOn: null, attachment: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+    const newTask = { 
+        id: String(Date.now()), 
+        title, 
+        status: currentColumnStatus, 
+        description, 
+        dueDate: dueDate || null, 
+        assignee, 
+        completedOn: null, 
+        attachment: null, 
+        createdAt: new Date().toISOString(), 
+        updatedAt: new Date().toISOString() 
+    };
     
-    await updateUserOnServer();
-    closeModal();
-    showProjectDetail(currentProjectId);
-    showToast('Đã thêm công việc mới.', 'success');
+    try {
+        await fetchWithAuth(`/api/projects/${currentProjectId}/tasks`, {
+            method: 'POST',
+            body: JSON.stringify(newTask)
+        });
+
+        closeModal();
+        showToast('Đã thêm công việc mới.', 'success');
+
+    } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu thêm task:", error);
+        showToast(error.message, 'error');
+    }
 };
 
 function openTaskDetailModal(id) {
@@ -322,7 +334,6 @@ function openTaskDetailModal(id) {
     document.getElementById('task-description-input').value = task.description || '';
     document.getElementById('task-duedate-input').value = task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '';
     
-    // Cập nhật giao diện chọn thành viên cho modal chi tiết
     const popoverList = document.querySelector('#task-detail-assignee-popover .assignee-popover-list');
     const selectedContainer = document.getElementById('task-detail-selected-assignees');
     const currentAssignees = task.assignee ? task.assignee.split(',').map(s => s.trim()) : [];
@@ -389,20 +400,17 @@ function initializeProjectsPage() {
     document.body.addEventListener('click', (e) => { 
         const tClosest = (selector) => e.target.closest(selector);
 
-        // Logic để ẩn/hiện popover
         const assigneeContainer = tClosest('.assignee-container');
         if (assigneeContainer) {
             const popover = assigneeContainer.querySelector('.assignee-popover');
             if (popover) popover.classList.toggle('active');
         } else {
-            // Nếu click ra ngoài, đóng tất cả popover
             document.querySelectorAll('.assignee-popover').forEach(p => p.classList.remove('active'));
         }
 
-        // Logic xử lý khi chọn một thành viên trong popover
         const memberItem = tClosest('.assignee-popover .member-item');
         if (memberItem) {
-            e.stopPropagation(); // Ngăn popover đóng lại ngay
+            e.stopPropagation(); 
             const checkbox = memberItem.querySelector('input[type="checkbox"]');
             checkbox.checked = !checkbox.checked;
             

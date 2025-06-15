@@ -1,4 +1,4 @@
-// --- START OF FILE js/sidebar.js ---
+// --- START OF FILE js/sidebar.js (FULL REAL-TIME VERSION) ---
 
 let isBotTyping = false;
 
@@ -143,7 +143,6 @@ function renderNotifications() {
     const countBadge = document.getElementById('notification-count');
     if (!container || !countBadge) return;
     
-    // Tạo cấu trúc header và list nếu chưa có
     if (!container.querySelector('#notification-list')) {
         container.innerHTML = `
             <div class="notification-header">Thông báo</div>
@@ -200,6 +199,10 @@ function renderNotifications() {
 };
 
 const openChatBox = async (friendId) => {
+    const friendItem = document.querySelector(`.friend-item[data-friend-id="${friendId}"]`);
+    const badge = friendItem?.querySelector('.message-badge');
+    if (badge) badge.remove();
+    
     const minimizedBubble = document.getElementById(`minimized-chat-${friendId}`); 
     if (minimizedBubble) { restoreChat(friendId); return; } 
     const chatContainer = document.getElementById('user-chat-container'); 
@@ -238,7 +241,6 @@ const openChatBox = async (friendId) => {
         title.textContent = 'Người bạn AI'; 
         headerAvatar.innerHTML = `<i class="fas fa-robot"></i>`; 
         textarea.placeholder = 'Trò chuyện với HaiBanhU...'; 
-        // --- SỬA ĐỔI LỜI CHÀO CỦA AI ---
         appendChatMessage('Chào bạn, tôi là HaiBanhU đây! Rất vui được gặp bạn. Có điều gì tôi có thể giúp hoặc bạn muốn trò chuyện không?', 'received', messagesContainer, 'ai'); 
     } else { 
         const friend = findUserById(friendId); 
@@ -273,21 +275,18 @@ const handleSendMessageInChat = async (event, textareaElement) => {
     if (!text) return; 
     
     const chatBox = input.closest('.chat-box'); 
-    const friendId = chatBox.dataset.friendId; 
+    const recipientId = chatBox.dataset.friendId; 
     const messagesContainer = chatBox.querySelector('.chat-box-messages'); 
     
     appendChatMessage(text, 'sent', messagesContainer, currentUser.id); 
     input.value = ''; 
     autoResizeChatTextarea(input); 
 
-    try {
-        await fetchWithAuth('/api/chat/send', {
-            method: 'POST',
-            body: JSON.stringify({ recipientId: friendId, text: text })
-        });
-    } catch (error) {
-        showToast("Gửi tin nhắn thất bại.", "error");
-    }
+    socket.emit('sendMessage', {
+        senderId: currentUser.id,
+        recipientId: recipientId,
+        text: text
+    });
 };
 
 function minimizeChat(friendId) {
@@ -329,4 +328,53 @@ function restoreChat(friendId) {
 function initializeSidebar() {
     renderFriendList();
     renderNotifications();
+
+    socket.on('receiveMessage', (message) => {
+        const senderId = message.sender.id || message.sender;
+        const activeChatBox = document.querySelector(`.chat-box[data-friend-id="${senderId}"]`);
+
+        if (activeChatBox && !activeChatBox.classList.contains('hidden')) {
+            const messagesContainer = activeChatBox.querySelector('.chat-box-messages');
+            appendChatMessage(message.text, 'received', messagesContainer, senderId);
+        } else {
+            const friendItem = document.querySelector(`.friend-item[data-friend-id="${senderId}"]`);
+            if (friendItem) {
+                let badge = friendItem.querySelector('.message-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'message-badge';
+                    friendItem.appendChild(badge);
+                }
+                badge.textContent = (parseInt(badge.textContent) || 0) + 1;
+                badge.style.display = 'flex';
+            }
+            showToast(`Bạn có tin nhắn mới`, 'info');
+        }
+    });
+    
+    if (!document.getElementById('sidebar-realtime-styles')) {
+        const style = document.createElement('style');
+        style.id = 'sidebar-realtime-styles';
+        style.innerHTML = `
+            .friend-item { position: relative; }
+            .message-badge {
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                background-color: var(--error-color);
+                color: white;
+                font-size: 10px;
+                font-weight: bold;
+                min-width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 0 4px;
+                z-index: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
